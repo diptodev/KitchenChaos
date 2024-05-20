@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
    private float moveSpeed=5f;
+    private float rotateSpeed = 15f;
     [SerializeField] Animator animator;
     // Update is called once per frame
     void Update()
@@ -33,7 +34,9 @@ public class Player : MonoBehaviour
             animator.SetBool("isWalk", false);
         }
          inputVector = inputVector.normalized;
-        Vector3 newPos = new Vector3(inputVector.x, 0, inputVector.y);
-        transform.position += newPos*Time.deltaTime*moveSpeed;
+        Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
+
+        transform.position += moveDir*Time.deltaTime*moveSpeed;
+        transform.forward=Vector3.Lerp(transform.forward,moveDir,Time.deltaTime*rotateSpeed);
     }
 }
