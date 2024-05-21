@@ -4,13 +4,28 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-   private float moveSpeed=5f;
+    [SerializeField] private GameInput gameInput;
+    [SerializeField] private LayerMask counterLayerMask;
+    private float moveSpeed=5f;
     private float rotateSpeed = 15f;
     private bool isWalking = false;
-    [SerializeField] private GameInput gameInput;
-    private bool canMove=false;
     
-    // Update is called once per frame
+    private bool canMove=false;
+    private Vector3 updatedMoveDir=Vector3.zero;
+    private ClearCounter selectedCounter;
+    private void Awake()
+    {
+        gameInput.onInteractionEvent += GameInput_onInteractionEvent;
+    }
+
+    private void GameInput_onInteractionEvent(object sender, System.EventArgs e)
+    {
+        if (selectedCounter !=null)
+        {
+            selectedCounter.Interact(selectedCounter);
+        }
+    }
+
     void Update()
     {
 
@@ -21,10 +36,18 @@ public class Player : MonoBehaviour
     {
         Vector2 inputVector = gameInput.GetNormalizedInput;
         Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
-        float interactDistance = 2f;
-        if (Physics.Raycast(transform.position, moveDir, out RaycastHit raycastHit, interactDistance))
+        if (moveDir != Vector3.zero)
         {
-            Debug.Log(raycastHit.transform);
+            updatedMoveDir = moveDir;
+        }
+        float interactDistance = 2f;
+        if (Physics.Raycast(transform.position, updatedMoveDir, out RaycastHit raycastHit, interactDistance,counterLayerMask))
+        {
+            if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter))
+            {
+                selectedCounter = clearCounter;
+            }
+          
         }
     }
     private void HandleMovement()
