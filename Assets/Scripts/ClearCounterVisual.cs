@@ -8,9 +8,11 @@ public class ClearCounterVisual : MonoBehaviour
     // Start is called before the first frame update
    [SerializeField] private BaseCounter baseCounter;
     [SerializeField] private GameObject[] selectedCounter;
+   
     void Start()
     {
         Player.playerInstance.OnSelectedCounterChanged += PlayerInstance_OnSelectedCounterChanged;
+       
     }
 
     private void PlayerInstance_OnSelectedCounterChanged(object sender, Player.OnSelectedCounterChangedEventArgs e)
