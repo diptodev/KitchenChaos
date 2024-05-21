@@ -31,9 +31,17 @@ public class ClearCounter : MonoBehaviour
             Debug.Log(kitchenObject.GetKitchenObjectSO() +" and the clearCounter is "+kitchenObject.GetClearCounter());
         }
     }
-    public void SetKitchenObjectParent(KitchenObject kitchenObject)
+    public void SetKitchenObject(KitchenObject kitchenObject)
     {
-
+        this.kitchenObject = kitchenObject;
+    }
+    public void ClearKitchenObject()
+    {
+        kitchenObject = null;
+    }
+    public KitchenObject GetKitchenObject()
+    {
+        return kitchenObject;
     }
     public Transform GetKitchenObjectFollowTransform()
     {
