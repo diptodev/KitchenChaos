@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,13 +10,23 @@ public class Player : MonoBehaviour
     private float moveSpeed=5f;
     private float rotateSpeed = 15f;
     private bool isWalking = false;
-    
     private bool canMove=false;
     private Vector3 updatedMoveDir=Vector3.zero;
     private ClearCounter selectedCounter;
+    public static Player playerInstance {  get; private set; }
+    public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
+
+    public class OnSelectedCounterChangedEventArgs : EventArgs
+    {
+      public  ClearCounter selectedCounter;
+    }
+
+
+
     private void Awake()
     {
         gameInput.onInteractionEvent += GameInput_onInteractionEvent;
+        playerInstance = this;
     }
 
     private void GameInput_onInteractionEvent(object sender, System.EventArgs e)
@@ -40,14 +51,35 @@ public class Player : MonoBehaviour
         {
             updatedMoveDir = moveDir;
         }
-        float interactDistance = 2f;
+        float interactDistance = 1f;
         if (Physics.Raycast(transform.position, updatedMoveDir, out RaycastHit raycastHit, interactDistance,counterLayerMask))
         {
             if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter))
             {
                 selectedCounter = clearCounter;
+                OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs()
+                {
+                    selectedCounter = selectedCounter
+                }) ; 
             }
-          
+            else
+            {
+                selectedCounter = null;
+                OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs()
+                {
+                    selectedCounter = selectedCounter
+                });
+            }
+
+
+        }
+        else
+        {
+            selectedCounter = null;
+            OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs()
+            {
+                selectedCounter = selectedCounter
+            }) ;
         }
     }
     private void HandleMovement()
