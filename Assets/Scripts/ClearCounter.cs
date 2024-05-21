@@ -8,12 +8,14 @@ public class ClearCounter : BaseCounter
 
     public override void Interact(Player player)
     {
-        //ClearCounter has nothing
+     
         if (!HasKitchenObject())
         {
-            //Player has something
+            //ClearCounter has nothing
+           
             if (player.HasKitchenObject())
             {
+                //Player has something and give it to the clearcounter
                 player.GetKitchenObject().SetIKitchenObjectParent(this);
             }
             else
@@ -21,17 +23,18 @@ public class ClearCounter : BaseCounter
                 //Player has Nothing
             }
         }
+     
         else
         {
-            //Player Has Nothing
-            if(HasKitchenObject())
+            //ClearCounter Has SomeThing
+            if (!player.HasKitchenObject())
             {
                 //ClearCounter has something and give it to the player
                 GetKitchenObject().SetIKitchenObjectParent(player);
             }
             else
             {
-                //ClearCounter has nothing
+                //ClearCounter has something but player has also something
             }
         }
     }
