@@ -5,9 +5,16 @@ using UnityEngine;
 public class ClearCounter : BaseCounter
 {
 
-  
-    public override void Interact(IKitchenObject player)
+
+    public override void Interact(Player player)
     {
+        if (!HasKitchenObject())
+        {
+            if (player.HasKitchenObject())
+            {
+                player.GetKitchenObject().SetIKitchenObjectParent(this);
+            }
+        }
     }
 
 }

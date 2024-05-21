@@ -6,7 +6,7 @@ public class BaseCounter : MonoBehaviour,IKitchenObject
 {
     private KitchenObject kitchenObject;
     [SerializeField] private Transform topPoint;
-    public virtual void Interact(IKitchenObject i)
+    public virtual void Interact(Player player)
     {
         Debug.LogError("Base Counter Interact call");
     }
