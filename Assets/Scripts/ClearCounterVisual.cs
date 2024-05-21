@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ClearCounterVisual : MonoBehaviour
 {
     // Start is called before the first frame update
-   [SerializeField] private ClearCounter clearCouter;
-    [SerializeField] private GameObject selectedCounter;
+   [SerializeField] private BaseCounter baseCounter;
+    [SerializeField] private GameObject[] selectedCounter;
     void Start()
     {
         Player.playerInstance.OnSelectedCounterChanged += PlayerInstance_OnSelectedCounterChanged;
@@ -14,7 +15,7 @@ public class ClearCounterVisual : MonoBehaviour
 
     private void PlayerInstance_OnSelectedCounterChanged(object sender, Player.OnSelectedCounterChangedEventArgs e)
     {
-        if (clearCouter==e.selectedCounter)
+        if (baseCounter==e.selectedCounter)
         {
             ShowClearCounterSelected();
         }
@@ -25,10 +26,16 @@ public class ClearCounterVisual : MonoBehaviour
     }
     private void ShowClearCounterSelected()
     {
-        selectedCounter.SetActive(true);
+        foreach(GameObject selectedCounterObject in selectedCounter){
+            selectedCounterObject.SetActive(true);
+        }
+        
     }
     private void HideClearCounterSelected()
     {
-        selectedCounter.SetActive(false);
+        foreach (GameObject selectedCounterObject in selectedCounter)
+        {
+            selectedCounterObject.SetActive(false);
+        }
     }
 }

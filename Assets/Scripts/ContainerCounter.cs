@@ -2,18 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClearCounter : BaseCounter,IKitchenObject
+public class ContainerCounter : BaseCounter,IKitchenObject
 {
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
     [SerializeField] private Transform topPoint;
- 
-   private KitchenObject kitchenObject;
 
+    private KitchenObject kitchenObject;
 
     public override void Interact(IKitchenObject player)
     {
 
-      if(kitchenObject == null)
+        if (kitchenObject == null)
         {
             Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefabVisuals, topPoint);
             kitchenObjectTransform.localPosition = Vector3.zero;
