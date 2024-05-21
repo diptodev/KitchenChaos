@@ -5,39 +5,19 @@ using UnityEngine;
 public class ContainerCounter : BaseCounter,IKitchenObject
 {
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
-    [SerializeField] private Transform topPoint;
-
-    private KitchenObject kitchenObject;
-
     public override void Interact(IKitchenObject player)
     {
 
-        if (kitchenObject == null)
+        if (!HasKitchenObject())
         {
-            Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefabVisuals, topPoint);
+            Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefabVisuals);
             kitchenObjectTransform.localPosition = Vector3.zero;
-            kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
-            kitchenObject.SetIKitchenObjectParent(this);
+             kitchenObjectTransform.GetComponent<KitchenObject>().SetIKitchenObjectParent(this);
         }
         else
         {
-            kitchenObject.SetIKitchenObjectParent(player);
+           GetKitchenObject().SetIKitchenObjectParent(player);
         }
     }
-    public void SetKitchenObject(KitchenObject kitchenObject)
-    {
-        this.kitchenObject = kitchenObject;
-    }
-    public void ClearKitchenObject()
-    {
-        kitchenObject = null;
-    }
-    public KitchenObject GetKitchenObject()
-    {
-        return kitchenObject;
-    }
-    public Transform GetKitchenObjectFollowTransform()
-    {
-        return topPoint;
-    }
+ 
 }
