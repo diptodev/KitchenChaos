@@ -33,7 +33,7 @@ public class Player : MonoBehaviour
     {
         if (selectedCounter !=null)
         {
-            selectedCounter.Interact(selectedCounter);
+            selectedCounter.Interact();
         }
     }
 
@@ -56,30 +56,16 @@ public class Player : MonoBehaviour
         {
             if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter))
             {
-                selectedCounter = clearCounter;
-                OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs()
-                {
-                    selectedCounter = selectedCounter
-                }) ; 
+                SetClearCounter(clearCounter);
             }
             else
             {
-                selectedCounter = null;
-                OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs()
-                {
-                    selectedCounter = selectedCounter
-                });
+                SetClearCounter(null);
             }
-
-
         }
         else
         {
-            selectedCounter = null;
-            OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs()
-            {
-                selectedCounter = selectedCounter
-            }) ;
+            SetClearCounter(null);
         }
     }
     private void HandleMovement()
@@ -118,6 +104,14 @@ public class Player : MonoBehaviour
 
         }
         transform.forward = Vector3.Lerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+    }
+    private void SetClearCounter(ClearCounter _clearCounter)
+    {
+        selectedCounter = _clearCounter;
+        OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs()
+        {
+            selectedCounter = selectedCounter
+        });
     }
     public bool IsWalking => isWalking;
 }
