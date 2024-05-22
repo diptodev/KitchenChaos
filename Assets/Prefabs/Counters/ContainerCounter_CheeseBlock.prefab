@@ -63,6 +63,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ContainerCounter_CheeseBlock
       objectReference: {fileID: 0}
+    - target: {fileID: 4473936414116318841, guid: 521f1a0949166d94196d464d6f2cc569,
+        type: 3}
+      propertyPath: containerCounter
+      value: 
+      objectReference: {fileID: 7811063735065556187}
     - target: {fileID: 7456603324707209272, guid: 521f1a0949166d94196d464d6f2cc569,
         type: 3}
       propertyPath: topPoint
@@ -74,7 +79,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: c08f740a5c04f3a429eae95a9aa2bc7d,
         type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 295419072422281958, guid: 521f1a0949166d94196d464d6f2cc569, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -85,3 +91,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 800888816409720035}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7811063735065556187 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7456603324707209272, guid: 521f1a0949166d94196d464d6f2cc569,
+    type: 3}
+  m_PrefabInstance: {fileID: 800888816409720035}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aca08e0e5666d8342a0e6ce3162be0c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -83,7 +83,7 @@ public class Player : BaseCounter
         {
             //Attempt to move towards X
             Vector3 moveDirX = new Vector3(moveDir.x, 0f, 0f).normalized;
-            canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirX, moveDistance);
+            canMove =moveDirX!=Vector3.zero && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirX, moveDistance);
             if (canMove)
             {
                 moveDir = moveDirX;
@@ -91,7 +91,7 @@ public class Player : BaseCounter
             else
             {
                 Vector3 moveDirZ = new Vector3(0f, 0f, moveDir.z).normalized;
-                canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirZ, moveDistance);
+                canMove = moveDirZ != Vector3.zero && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirZ, moveDistance);
                 if (canMove)
                 {
                     moveDir = moveDirZ;
