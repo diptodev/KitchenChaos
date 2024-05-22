@@ -40,7 +40,7 @@ public class CuttingCounter : BaseCounter
     }
     public override void AlternateInteract()
     {
-        if (HasKitchenObject())
+        if (HasKitchenObject() && HasRecipeWithInput(GetKitchenObject().GetKitchenObjectSO()))
         {
             KitchenObjectSO outputKitchenObject=GetKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
             GetKitchenObject().DestroyKitchenObject();
