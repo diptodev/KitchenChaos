@@ -38,5 +38,8 @@ public class ClearCounter : BaseCounter
             }
         }
     }
-
+    public override void AlternateInteract()
+    {
+        
+    }
 }

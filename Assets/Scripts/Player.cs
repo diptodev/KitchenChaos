@@ -16,7 +16,7 @@ public class Player : BaseCounter
 
     public static Player playerInstance {  get; private set; }
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
-
+    
     public class OnSelectedCounterChangedEventArgs : EventArgs
     {
       public  BaseCounter selectedCounter;
@@ -27,7 +27,13 @@ public class Player : BaseCounter
     private void Awake()
     {
         gameInput.onInteractionEvent += GameInput_onInteractionEvent;
+        gameInput.onInteractionAlternateEvent += GameInput_onInteractionAlternateEvent;
         playerInstance = this;
+    }
+
+    private void GameInput_onInteractionAlternateEvent(object sender, EventArgs e)
+    {
+        selectedCounter.AlternateInteract();
     }
 
     private void GameInput_onInteractionEvent(object sender, System.EventArgs e)

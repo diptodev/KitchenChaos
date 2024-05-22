@@ -22,5 +22,8 @@ public class ContainerCounter : BaseCounter
           // GetKitchenObject().SetIKitchenObjectParent(player);
         }
     }
- 
+    public override void AlternateInteract()
+    {
+
+    }
 }

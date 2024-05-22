@@ -10,6 +10,11 @@ public class BaseCounter : MonoBehaviour,IKitchenObject
     {
         Debug.LogError("Base Counter Interact call");
     }
+    public virtual void AlternateInteract()
+    {
+
+        Debug.LogError("Base Counter AlternateInteract call");
+    }
     public void SetKitchenObject(KitchenObject kitchenObject)
     {
         this.kitchenObject = kitchenObject;
@@ -30,4 +35,5 @@ public class BaseCounter : MonoBehaviour,IKitchenObject
     {
         return topPoint;
     }
+    
 }

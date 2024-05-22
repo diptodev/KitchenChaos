@@ -237,7 +237,6 @@ MonoBehaviour:
   - {fileID: 6224570353768338185}
   - {fileID: 7966074786048178144}
   - {fileID: 2301335092123732535}
-  containerCounter: {fileID: 0}
 --- !u!4 &8265857226533342299 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4589716710238282923, guid: d72bee846803d074784ffb8f64e993ca,
@@ -343,6 +342,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   topPoint: {fileID: 2571603925709411121}
+  kitchenObjectSO: {fileID: 11400000, guid: 9a84f7309764e9740ab4c37dc4058cba, type: 2}
 --- !u!4 &1819505383204228039 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8105478602132277240, guid: 9e917bc3beffef841a222351a094a0c2,
