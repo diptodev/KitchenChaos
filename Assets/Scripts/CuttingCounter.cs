@@ -6,6 +6,7 @@ using UnityEngine;
 public class CuttingCounter : BaseCounter
 {
     [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOArray;
+    public event EventHandler OnProgressBarVisibility;
     public event EventHandler<OnCuttginCounterProgressBarEventArgs> OnCuttingCounterProgressBar;
     public class OnCuttginCounterProgressBarEventArgs : EventArgs
     {
@@ -65,10 +66,7 @@ public class CuttingCounter : BaseCounter
                 KitchenObjectSO outputKitchenObject = GetKitchenObjectSO(kitchenObjectSO);
                 GetKitchenObject().DestroyKitchenObject();
                 KitchenObject.SpawnKitchenObject(outputKitchenObject, this);
-                OnCuttingCounterProgressBar.Invoke(this, new OnCuttginCounterProgressBarEventArgs
-                {
-                    normalizedProgressBarValue = 0f
-                });
+               
             }
 
         }
