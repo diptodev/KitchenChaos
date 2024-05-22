@@ -14,7 +14,9 @@ public class CuttingCounter : BaseCounter
             if (player.HasKitchenObject())
             {
                 //Player has something and give it to the clearcounter
-                player.GetKitchenObject().SetIKitchenObjectParent(this);
+                if (HasRecipeWithInput(player.GetKitchenObject().GetKitchenObjectSO())){
+                    player.GetKitchenObject().SetIKitchenObjectParent(this);
+                }
             }
             else
             {
@@ -48,6 +50,15 @@ public class CuttingCounter : BaseCounter
         {
             
         }
+    }
+    private bool HasRecipeWithInput(KitchenObjectSO kitchenObjectSO)
+    {
+        foreach (CuttingRecipeSO cuttingRecipeSO in cuttingRecipeSOArray)
+        {
+            //  Debug.Log(cuttingRecipeSO.input +" = " + cuttingRecipeSO.output);
+            if (cuttingRecipeSO.input == kitchenObjectSO) return true;
+        }
+        return false;
     }
     private KitchenObjectSO GetKitchenObjectSO(KitchenObjectSO intputKitchenObject)
     {
