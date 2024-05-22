@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CuttingCounter : BaseCounter
 {
-    [SerializeField] private KitchenObjectSO kitchenObjectSO;
+    [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOArray;
     public override void Interact(Player player)
     {
         if (!HasKitchenObject())
@@ -40,13 +40,23 @@ public class CuttingCounter : BaseCounter
     {
         if (HasKitchenObject())
         {
-           GetKitchenObject().DestroyKitchenObject();
-            KitchenObject.SpawnKitchenObject(kitchenObjectSO, this);
+            KitchenObjectSO outputKitchenObject=GetKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
+            GetKitchenObject().DestroyKitchenObject();
+            KitchenObject.SpawnKitchenObject(outputKitchenObject, this);
         }
         else
         {
             
         }
+    }
+    private KitchenObjectSO GetKitchenObjectSO(KitchenObjectSO intputKitchenObject)
+    {
+        foreach(CuttingRecipeSO cuttingRecipeSO in cuttingRecipeSOArray)
+        {
+          //  Debug.Log(cuttingRecipeSO.input +" = " + cuttingRecipeSO.output);
+            if (cuttingRecipeSO.input == intputKitchenObject) return cuttingRecipeSO.output;
+        }
+        return null;
     }
      
 }
