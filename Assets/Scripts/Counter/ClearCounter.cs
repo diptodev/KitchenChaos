@@ -26,6 +26,7 @@ public class ClearCounter : BaseCounter
      
         else
         {
+            
             //ClearCounter Has SomeThing
             if (!player.HasKitchenObject())
             {
@@ -35,14 +36,28 @@ public class ClearCounter : BaseCounter
             else
             {
                 //ClearCounter has something but player has also something
+
                 if (player.GetKitchenObject().TryKitchenPlate(out PlateKitchenObject plateKitchenObject))
                 {
-                    if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO())){
+                    if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
+                    {
                         GetKitchenObject().DestroyKitchenObject();
                     }
                 }
-               
-            }
+                else
+                {
+                      if (GetKitchenObject().TryKitchenPlate(out PlateKitchenObject clearCounterPlateKitchenObject)) 
+                    { 
+
+                       if (clearCounterPlateKitchenObject.TryAddIngredient(player.GetKitchenObject().GetKitchenObjectSO()))
+                      {
+                        player.GetKitchenObject().DestroyKitchenObject();
+                        GetKitchenObject().SetIKitchenObjectParent(player);
+                      }
+                    }
+                 }
+               }
+           
         }
     }
     public override void AlternateInteract()

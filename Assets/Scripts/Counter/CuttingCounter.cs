@@ -49,10 +49,22 @@ public class CuttingCounter : BaseCounter,IProgressBarUI
             if (!player.HasKitchenObject())
             {
                 //ClearCounter has something and give it to the player
-                GetKitchenObject().SetIKitchenObjectParent(player);
+                if (currentCuttingProgress>=maxCuttingProgress)
+                {
+                    GetKitchenObject().SetIKitchenObjectParent(player);
+                }
             }
             else
             {
+                if (player.GetKitchenObject().TryKitchenPlate(out PlateKitchenObject plateKitchenObject))
+                {
+
+                    if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
+                    {
+                        GetKitchenObject().DestroyKitchenObject();
+                       
+                    }
+                }
                 //ClearCounter has something but player has also something
             }
         }
@@ -63,7 +75,7 @@ public class CuttingCounter : BaseCounter,IProgressBarUI
         {
             currentCuttingProgress++;
             maxCuttingProgress = GetSelectedCuttingRecipe(kitchenObjectSO).maxCuttingProgress;
-            if (kitchenObjectSO==GetKitchenObject().GetKitchenObjectSO())
+            if (kitchenObjectSO==GetKitchenObject()?.GetKitchenObjectSO())
             {
                 OnCuttingRecipeInteract.Invoke(this, EventArgs.Empty);
             }
