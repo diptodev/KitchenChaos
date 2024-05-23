@@ -29,8 +29,7 @@ public class PlateCounter : BaseCounter
             KitchenObject.SpawnKitchenObject(plateObjectSO, this);
             GetKitchenObject().SetIKitchenObjectParent(this);
             GetKitchenObject().SetIKitchenObjectParent(player);
-            
-          //  GetKitchenObject().DestroyKitchenObject();
+          
         }
     }
 
