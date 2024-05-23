@@ -72,6 +72,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2057961318588760395}
   m_SourcePrefab: {fileID: 100100000, guid: 93af8b85a17635f40a5b76ed82a86c18, type: 3}
+--- !u!1 &5811048825113723583 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 17251720544094567, guid: 93af8b85a17635f40a5b76ed82a86c18,
+    type: 3}
+  m_PrefabInstance: {fileID: 5807871413445544920}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8009730280283451250 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4589716710238282922, guid: 93af8b85a17635f40a5b76ed82a86c18,
@@ -117,7 +123,12 @@ PrefabInstance:
     - target: {fileID: 5371795434924384014, guid: 9e917bc3beffef841a222351a094a0c2,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.05
+      value: 1.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 5371795434924384014, guid: 9e917bc3beffef841a222351a094a0c2,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7821432286620365891, guid: 9e917bc3beffef841a222351a094a0c2,
         type: 3}
@@ -210,6 +221,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   topPoint: {fileID: 2435495562005110249}
+  fryingRecipeSOArray:
+  - {fileID: 11400000, guid: 925662a15f74a0748b5b0ec49b1cb224, type: 2}
+  fireEffect: {fileID: 5811048825113723583}
 --- !u!4 &1962616074775987487 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8105478602132277240, guid: 9e917bc3beffef841a222351a094a0c2,
