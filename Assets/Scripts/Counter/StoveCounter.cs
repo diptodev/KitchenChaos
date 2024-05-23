@@ -33,7 +33,7 @@ public class StoveCounter : BaseCounter,IProgressBarUI
     }
     private void Update()
     {
-        Debug.Log(state);
+        
         if (kitchenObjectSO != null)
         {
 
