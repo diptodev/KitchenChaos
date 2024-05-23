@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-public class StoveCounter : BaseCounter
+public class StoveCounter : BaseCounter,IProgressBarUI
 {
     [SerializeField] private FryingRecipeSO[] fryingRecipeSOArray;
     [SerializeField] private GameObject fireEffect;
@@ -19,6 +20,13 @@ public class StoveCounter : BaseCounter
         Default
     }
     private State state;
+
+    public event EventHandler<IProgressBarUI.OnIProgressBarUIEventArgs> OnIProgressBarUI;
+    public class OnIProgressBarUIEventArgs : EventArgs
+    {
+        public float normalizedProgressBarValue;
+        public string modeColor;
+    }
     private void Start()
     {
         state = State.Idle;
@@ -43,7 +51,15 @@ public class StoveCounter : BaseCounter
                     {
                         state = State.Fried;
                     }
-                    else cookingTime += Time.deltaTime;
+                    else {
+                        cookingTime += Time.deltaTime;
+                        OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
+                        {
+                            normalizedProgressBarValue = cookingTime / frying.maxCookedTime,
+                            modeColor="burning"
+                        }) ;
+                    }
+
                     break;
                 case State.Fried:
                     GetKitchenObject().DestroyKitchenObject();
@@ -58,7 +74,11 @@ public class StoveCounter : BaseCounter
                     else
                     {
                         restingTime += Time.deltaTime;
-
+                        OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
+                        {
+                            normalizedProgressBarValue = restingTime / frying.maxCookedTime,
+                            modeColor="resting"
+                        });
                     }
                     break;
                 case State.Burning:
@@ -71,13 +91,21 @@ public class StoveCounter : BaseCounter
                     else
                     {
                         burningTime += Time.deltaTime;
-
+                        OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
+                        {
+                            normalizedProgressBarValue = burningTime / frying.maxCookedTime
+                            ,
+                            modeColor="black"
+                        });
                     }
                     break;
                 case State.Burned:
                     KitchenObject.SpawnKitchenObject(frying.burned, this);
                     state = State.Default;
-
+                    OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
+                    {
+                        normalizedProgressBarValue =0
+                    });
                     break;
                 case State.Default:
                     fireEffect.SetActive(false);
@@ -131,6 +159,11 @@ public class StoveCounter : BaseCounter
                 burningTime = 0;
                 state = State.Idle;
                 fireEffect.SetActive(false);
+                OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
+                {
+                    normalizedProgressBarValue = 0,
+                    modeColor="burning"
+                });
             }
             else
             {

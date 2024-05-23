@@ -7,15 +7,19 @@ public class ProgressBarUI : MonoBehaviour
 {
    // [SerializeField] ProgressBarUI progressBarUI;
     [SerializeField] Image progressBarImage;
-    [SerializeField] CuttingCounter cuttingCounter;
+    [SerializeField] GameObject bar;
+    [SerializeField] GameObject iProgressBarUIEventArgs;
+    private IProgressBarUI progressBarUI;
     private void Start()
     {
-        cuttingCounter.OnCuttingCounterProgressBar += CuttingCounter_OnCuttingCounterProgressBar;
+        progressBarUI= iProgressBarUIEventArgs.GetComponent<IProgressBarUI>();
+        progressBarUI.OnIProgressBarUI += ProgressBarUI_OnIProgressBarUI;
         progressBarImage.fillAmount = 0;
         Hide();
        
     }
-    private void CuttingCounter_OnCuttingCounterProgressBar(object sender, CuttingCounter.OnCuttginCounterProgressBarEventArgs e)
+
+    private void ProgressBarUI_OnIProgressBarUI(object sender, IProgressBarUI.OnIProgressBarUIEventArgs e)
     {
         progressBarImage.fillAmount = e.normalizedProgressBarValue;
         if (progressBarImage.fillAmount == 0 || progressBarImage.fillAmount == 1)
@@ -24,11 +28,24 @@ public class ProgressBarUI : MonoBehaviour
         }
         else
         {
-            Show();
+            
+                Show(e.modeColor);
+             
         }
     }
-    private void Show()
+    private void Show(string color)
     {
+        if (color == "burning") {
+            progressBarImage.color = Color.yellow;
+        }
+        else if(color =="resting")
+        {
+            progressBarImage.color = Color.green;
+        }
+        else
+        {
+            progressBarImage.color = Color.red;
+        }
         gameObject.SetActive(true);
     }
     private void Hide()

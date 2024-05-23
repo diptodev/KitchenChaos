@@ -3,14 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CuttingCounter : BaseCounter
+public class CuttingCounter : BaseCounter,IProgressBarUI
 {
     [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOArray;
     public event EventHandler OnCuttingRecipeInteract;
-    public event EventHandler<OnCuttginCounterProgressBarEventArgs> OnCuttingCounterProgressBar;
+    public event EventHandler<IProgressBarUI.OnIProgressBarUIEventArgs> OnIProgressBarUI;
     public class OnCuttginCounterProgressBarEventArgs : EventArgs
     {
       public  float normalizedProgressBarValue;
+        public string modeColor;
     }
     private KitchenObjectSO kitchenObjectSO;
     int currentCuttingProgress, maxCuttingProgress;
@@ -66,9 +67,10 @@ public class CuttingCounter : BaseCounter
             {
                 OnCuttingRecipeInteract.Invoke(this, EventArgs.Empty);
             }
-            OnCuttingCounterProgressBar.Invoke(this, new OnCuttginCounterProgressBarEventArgs
+            OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
             {
-                normalizedProgressBarValue = (float)currentCuttingProgress / maxCuttingProgress
+                normalizedProgressBarValue = (float)currentCuttingProgress / maxCuttingProgress,
+                modeColor = "burning"
             }) ;
             if (HasKitchenObject() && HasRecipeWithInput(kitchenObjectSO) && currentCuttingProgress >= maxCuttingProgress && !player.HasKitchenObject())
             {
