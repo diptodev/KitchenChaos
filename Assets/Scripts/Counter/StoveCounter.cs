@@ -152,29 +152,18 @@ public class StoveCounter : BaseCounter,IProgressBarUI
             if (!player.HasKitchenObject())
             {
                 //ClearCounter has something and give it to the player
-                if (state==State.Burned)
+                if (state==State.Burned || state==State.Default)
                 {
-                    player.GetKitchenObject().SetIKitchenObjectParent(this);
-
+                    GetKitchenObject().SetIKitchenObjectParent(player);
+                    ResetStove();
                 }
             }
             else
             {
                 //ClearCounter has something but player has also something
-                if (state == State.Fried || state == State.Resting || state == State.Burning)
+                if (state == State.Fried || state == State.Resting || state == State.Burning || state==State.Default || state==State.Burned)
                 {
-
-                    kitchenObjectSO = null;
-                    cookingTime = 0;
-                    restingTime = 0;
-                    burningTime = 0;
-                    state = State.Idle;
-                    fireEffect.SetActive(false);
-                    OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
-                    {
-                        normalizedProgressBarValue = 0,
-                        modeColor = "burning"
-                    });
+                    ResetStove();
                     if (player.GetKitchenObject().TryKitchenPlate(out PlateKitchenObject plateKitchenObject))
                     {
                         if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
@@ -186,6 +175,21 @@ public class StoveCounter : BaseCounter,IProgressBarUI
             }
             
         }
+    }
+    private void ResetStove()
+    {
+
+        kitchenObjectSO = null;
+        cookingTime = 0;
+        restingTime = 0;
+        burningTime = 0;
+        state = State.Idle;
+        fireEffect.SetActive(false);
+        OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
+        {
+            normalizedProgressBarValue = 0,
+            modeColor = "burning"
+        });
     }
     public override void AlternateInteract()
     {
