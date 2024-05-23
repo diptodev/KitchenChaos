@@ -7,7 +7,7 @@ public class PlateCounter : BaseCounter
 {
 
     [SerializeField] KitchenObjectSO plateObjectSO;
-    [SerializeField] Transform SpawnedPoint;
+ 
     float plateSpawnInterval = 0;
     float maxPlateSpawnIntervalTime = 4;
     float plateSpawnAmount = 0;
@@ -32,9 +32,7 @@ public class PlateCounter : BaseCounter
         {
             if (plateSpawnAmount>0)
             {
-                KitchenObject.SpawnKitchenObject(plateObjectSO, this);
-                GetKitchenObject().SetIKitchenObjectParent(this);
-                GetKitchenObject().SetIKitchenObjectParent(player);
+                KitchenObject.SpawnKitchenObject(plateObjectSO, player);
                 OnSpawnedRemoved?.Invoke(this, EventArgs.Empty);
                 plateSpawnAmount--;
             }
