@@ -35,6 +35,13 @@ public class ClearCounter : BaseCounter
             else
             {
                 //ClearCounter has something but player has also something
+                if (player.GetKitchenObject().TryKitchenPlate(out PlateKitchenObject plateKitchenObject))
+                {
+                    if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO())){
+                        GetKitchenObject().DestroyKitchenObject();
+                    }
+                }
+               
             }
         }
     }
