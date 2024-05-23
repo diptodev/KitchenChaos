@@ -1,15 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlateCounter : BaseCounter
 {
+
     [SerializeField] KitchenObjectSO plateObjectSO;
     [SerializeField] Transform SpawnedPoint;
     float plateSpawnInterval = 0;
     float maxPlateSpawnIntervalTime = 4;
     float plateSpawnAmount = 0;
     float maxPlateSpawnAmount = 4;
+    public event EventHandler OnPlateSpawned;
+    public event EventHandler OnSpawnedRemoved;
     private void Update()
     {
         plateSpawnInterval += Time.deltaTime;
@@ -18,7 +22,7 @@ public class PlateCounter : BaseCounter
         {
             plateSpawnInterval = 0;
             plateSpawnAmount++;
-            Instantiate(plateObjectSO.prefabVisuals, SpawnedPoint);
+            OnPlateSpawned?.Invoke(this,EventArgs.Empty);
         }
 
     }
@@ -26,10 +30,14 @@ public class PlateCounter : BaseCounter
     {
         if (!player.HasKitchenObject())
         {
-            KitchenObject.SpawnKitchenObject(plateObjectSO, this);
-            GetKitchenObject().SetIKitchenObjectParent(this);
-            GetKitchenObject().SetIKitchenObjectParent(player);
-          
+            if (plateSpawnAmount>0)
+            {
+                KitchenObject.SpawnKitchenObject(plateObjectSO, this);
+                GetKitchenObject().SetIKitchenObjectParent(this);
+                GetKitchenObject().SetIKitchenObjectParent(player);
+                OnSpawnedRemoved?.Invoke(this, EventArgs.Empty);
+                plateSpawnAmount--;
+            }
         }
     }
 

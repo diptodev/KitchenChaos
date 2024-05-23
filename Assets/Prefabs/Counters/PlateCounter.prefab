@@ -71,6 +71,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 935136311008992724}
+    - targetCorrespondingSourceObject: {fileID: 4589716710238282922, guid: e21b499d164095947b7559f0267f0e63,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6686918474151680790}
   m_SourcePrefab: {fileID: 100100000, guid: e21b499d164095947b7559f0267f0e63, type: 3}
 --- !u!4 &8139291654734008386 stripped
 Transform:
@@ -99,6 +103,22 @@ MonoBehaviour:
   baseCounter: {fileID: 9172690069735060524}
   selectedCounter:
   - {fileID: 5049974489384969945}
+--- !u!114 &6686918474151680790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8139291654734008387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9eba156942a701d4599abe1bc5819788, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  plateCounter: {fileID: 9172690069735060524}
+  platePrefabs: {fileID: 3812876574508226176, guid: c0c9afd619b40914a8f625c0535e2284,
+    type: 3}
+  counterTopPoint: {fileID: 2939047580427505637}
 --- !u!1001 &7081324715018670315
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -198,6 +218,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   topPoint: {fileID: 2939047580427505637}
+  plateObjectSO: {fileID: 11400000, guid: 415633b0cb81bc741a0ea9b44345af07, type: 2}
+  SpawnedPoint: {fileID: 0}
 --- !u!4 &1313250741288048403 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8105478602132277240, guid: 9e917bc3beffef841a222351a094a0c2,
