@@ -10,9 +10,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2883824230507486803, guid: f8eabb939e8a0bc4da45c7ad7f798526,
         type: 3}
+      propertyPath: bar
+      value: 
+      objectReference: {fileID: 987877766126280769}
+    - target: {fileID: 2883824230507486803, guid: f8eabb939e8a0bc4da45c7ad7f798526,
+        type: 3}
       propertyPath: iProgressBarUIEventArgs
       value: 
       objectReference: {fileID: 561720744370140836}
+    - target: {fileID: 3914482654504997932, guid: f8eabb939e8a0bc4da45c7ad7f798526,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5193528870346434992, guid: f8eabb939e8a0bc4da45c7ad7f798526,
         type: 3}
       propertyPath: m_Pivot.x
@@ -121,8 +131,37 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8691429397114000843, guid: f8eabb939e8a0bc4da45c7ad7f798526,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1933589718469159394}
   m_SourcePrefab: {fileID: 100100000, guid: f8eabb939e8a0bc4da45c7ad7f798526, type: 3}
+--- !u!1 &987877766126280769 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4217917976922889293, guid: f8eabb939e8a0bc4da45c7ad7f798526,
+    type: 3}
+  m_PrefabInstance: {fileID: 3980244828491332620}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5738293364836641223 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8691429397114000843, guid: f8eabb939e8a0bc4da45c7ad7f798526,
+    type: 3}
+  m_PrefabInstance: {fileID: 3980244828491332620}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1933589718469159394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5738293364836641223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2573be665a7049541b672dfff1ec2ee9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mode: 2
 --- !u!224 &9164743228878198204 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5193528870346434992, guid: f8eabb939e8a0bc4da45c7ad7f798526,

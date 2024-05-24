@@ -5,10 +5,13 @@ public class StoveCounter : BaseCounter,IProgressBarUI
 {
     [SerializeField] private FryingRecipeSO[] fryingRecipeSOArray;
     [SerializeField] private GameObject fireEffect;
+   
     private KitchenObjectSO kitchenObjectSO;
     private float cookingTime;
     private float restingTime;
     private float burningTime;
+    private float maxRestingTime = 5;
+    private float maxBurningTime = 4;
     private enum State
     {
         Idle,
@@ -67,7 +70,7 @@ public class StoveCounter : BaseCounter,IProgressBarUI
                     state = State.Resting;
                     break;
                 case State.Resting:
-                    if (restingTime > 3)
+                    if (restingTime >maxRestingTime)
                     {
                         state = State.Burning;
                     }
@@ -83,7 +86,7 @@ public class StoveCounter : BaseCounter,IProgressBarUI
                     break;
                 case State.Burning:
 
-                    if (burningTime > 3)
+                    if (burningTime > maxBurningTime)
                     {
                         state = State.Burned;
                         GetKitchenObject().DestroyKitchenObject();
