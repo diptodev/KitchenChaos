@@ -6,6 +6,7 @@ using UnityEngine;
 public class CompletePlateVisual : MonoBehaviour
 {
     [SerializeField]private PlateKitchenObject plateKitchenObject;
+    
     [Serializable]
     public struct PlateKitchenIngredientGameObject
     {
@@ -19,10 +20,7 @@ public class CompletePlateVisual : MonoBehaviour
          
         plateKitchenObject.OnIngredientAdded += PlateKitchenObject_OnIngredientAdded;
        
-        foreach (PlateKitchenIngredientGameObject plateKitchenIngredientGameObject in plateKitchenIngredientGameObjects)
-        {
-            plateKitchenIngredientGameObject.gameObject.SetActive(false);
-        }
+       
     }
 
     private void PlateKitchenObject_OnIngredientAdded(object sender, PlateKitchenObject.OnIngredientAddedEventArgs e)
