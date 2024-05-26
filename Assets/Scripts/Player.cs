@@ -33,7 +33,10 @@ public class Player : BaseCounter
 
     private void GameInput_onInteractionAlternateEvent(object sender, EventArgs e)
     {
-        selectedCounter.AlternateInteract();
+        if (selectedCounter !=null)
+        {
+            selectedCounter.AlternateInteract();
+        }
     }
 
     private void GameInput_onInteractionEvent(object sender, System.EventArgs e)

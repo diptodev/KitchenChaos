@@ -9,7 +9,11 @@ public class DeliverMangerSingleUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI recipeTitle;
     [SerializeField] private Transform iconImage;
     [SerializeField] private Transform iconContainer;
-  public void SetKitchenRecipeSO(KitchenReciepeSO kitchenReciepeSO)
+    private void Start()
+    {
+        iconImage.gameObject.SetActive(false);
+    }
+    public void SetKitchenRecipeSO(KitchenReciepeSO kitchenReciepeSO)
     {
         recipeTitle.text = kitchenReciepeSO.recipeName;
         foreach (Transform child in iconContainer)
