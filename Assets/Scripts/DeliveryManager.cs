@@ -1,12 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 
 public class DeliveryManager : MonoBehaviour
 {
+    public event EventHandler onRecipeSpawned;
+    public event EventHandler onRecipeCompleted;
     public static DeliveryManager instance {  get; private set; }
-    private List<KitchenReciepeSO> waitingRecipeSO;
+    private List<KitchenReciepeSO> waitingRecipeSOList;
     [SerializeField] private KitchenRecipeSOList mkitchenRecipeSO;
     private int currentWaitingRecipeNumber=0;
     private int maxWaitingRecipeNumber = 4;
@@ -15,7 +19,7 @@ public class DeliveryManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        waitingRecipeSO=new List<KitchenReciepeSO> ();
+        waitingRecipeSOList=new List<KitchenReciepeSO> ();
     }
     private void Update()
     {
@@ -26,9 +30,9 @@ public class DeliveryManager : MonoBehaviour
             {
                 currentWaitingRecipeNumber++;
                 currentSpawnedTime=0;
-                KitchenReciepeSO kitchenReciepeSO = mkitchenRecipeSO.kitchenReciepeSOList[Random.Range(0,mkitchenRecipeSO.kitchenReciepeSOList.Count)];
-                waitingRecipeSO.Add(kitchenReciepeSO);
-                Debug.Log(kitchenReciepeSO.recipeName);
+                KitchenReciepeSO kitchenReciepeSO = mkitchenRecipeSO.kitchenReciepeSOList[UnityEngine.Random.Range(0,mkitchenRecipeSO.kitchenReciepeSOList.Count)];
+                waitingRecipeSOList.Add(kitchenReciepeSO);
+                onRecipeSpawned.Invoke(this, EventArgs.Empty);
             }
            
         }
@@ -38,9 +42,9 @@ public class DeliveryManager : MonoBehaviour
     {
          List<KitchenObjectSO>kitchenObjectList=plateKitchenObject.GetKitchenObjectList();
 
-        for (int i = 0; i < waitingRecipeSO.Count; i++)
+        for (int i = 0; i < waitingRecipeSOList.Count; i++)
         {
-            KitchenReciepeSO kitchenReciepeSO = waitingRecipeSO[i];
+            KitchenReciepeSO kitchenReciepeSO = waitingRecipeSOList[i];
             if (kitchenObjectList.Count==kitchenReciepeSO.kitchenRecipeSO.Count)
             {
                 bool completeIngredientFound = true;
@@ -63,8 +67,10 @@ public class DeliveryManager : MonoBehaviour
                 }
                 if (completeIngredientFound)
                 {
-                    waitingRecipeSO.RemoveAt(i);
+                    
+                    waitingRecipeSOList.RemoveAt(i);
                     currentWaitingRecipeNumber -= 1;
+                    onRecipeCompleted.Invoke(this, EventArgs.Empty);
                     return true;
                 }
                  
@@ -72,6 +78,10 @@ public class DeliveryManager : MonoBehaviour
            
         }
         return false;
+    }
+    public List<KitchenReciepeSO> GetKitchenRecipeSOList()
+    {
+        return waitingRecipeSOList;
     }
 }
 
