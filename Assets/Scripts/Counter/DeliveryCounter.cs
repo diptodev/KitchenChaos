@@ -10,13 +10,19 @@ public class DeliveryCounter : BaseCounter
         {
             if (player.GetKitchenObject().TryKitchenPlate(out PlateKitchenObject plateKitchenObject ))
             {
-                player.GetKitchenObject().DestroyKitchenObject();
-                Debug.Log("Recipe Deliver Success");
+                if (DeliveryManager.instance.DeliverRecipe(plateKitchenObject)){
+                    player.GetKitchenObject().DestroyKitchenObject();
+                }
+                else
+                {
+                    Debug.Log("Wrong Recipe");
+                }
+
 
             }
             else
             {
-                Debug.Log("Wrong Recipe ");
+                Debug.Log("Recipe not completed");
             }
         }
     }

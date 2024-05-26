@@ -12,4 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6eb8794eef217144b950f172c5491c2, type: 3}
   m_Name: MegaBurger
   m_EditorClassIdentifier: 
-  kitchenRecipeSO: []
+  kitchenRecipeSO:
+  - {fileID: 11400000, guid: c2ab1b5441b01c14c82a990a58a6400e, type: 2}
+  - {fileID: 11400000, guid: a50727e80f9fe7a4399a9e336ee49127, type: 2}
+  - {fileID: 11400000, guid: fb2452196bc45d643983781ddeb84c50, type: 2}
+  - {fileID: 11400000, guid: 6456fe658574af1468f17ef893617e72, type: 2}
+  - {fileID: 11400000, guid: 9a84f7309764e9740ab4c37dc4058cba, type: 2}
+  recipeName: Mega Burger
