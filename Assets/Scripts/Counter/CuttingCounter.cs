@@ -8,6 +8,7 @@ public class CuttingCounter : BaseCounter,IProgressBarUI
     [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOArray;
     public event EventHandler OnCuttingRecipeInteract;
     public event EventHandler<IProgressBarUI.OnIProgressBarUIEventArgs> OnIProgressBarUI;
+    public static event EventHandler OnAnyCut;
     public class OnCuttginCounterProgressBarEventArgs : EventArgs
     {
       public  float normalizedProgressBarValue;
@@ -90,6 +91,10 @@ public class CuttingCounter : BaseCounter,IProgressBarUI
                 GetKitchenObject().DestroyKitchenObject();
                 KitchenObject.SpawnKitchenObject(outputKitchenObject, this);
                
+            }
+            if (currentCuttingProgress<=maxCuttingProgress)
+            {
+                OnAnyCut.Invoke(this, EventArgs.Empty);
             }
 
         }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : BaseCounter
+public class Player : BaseCounter,IKitchenObject
 {
     [SerializeField] private GameInput gameInput;
     [SerializeField] private LayerMask counterLayerMask;
@@ -13,10 +13,10 @@ public class Player : BaseCounter
     private bool canMove=false;
     private Vector3 updatedMoveDir=Vector3.zero;
     private BaseCounter selectedCounter;
-
+   
     public static Player playerInstance {  get; private set; }
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
-    
+   
     public class OnSelectedCounterChangedEventArgs : EventArgs
     {
       public  BaseCounter selectedCounter;

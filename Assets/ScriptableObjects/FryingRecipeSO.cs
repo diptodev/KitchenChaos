@@ -9,4 +9,6 @@ public class FryingRecipeSO : ScriptableObject
     public KitchenObjectSO cooked;
     public KitchenObjectSO burned;
     public float maxCookedTime;
+    public float maxRestingTime;
+    public float maxBurningTime;
 }

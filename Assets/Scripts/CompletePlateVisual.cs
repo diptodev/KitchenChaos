@@ -6,7 +6,7 @@ using UnityEngine;
 public class CompletePlateVisual : MonoBehaviour
 {
     [SerializeField]private PlateKitchenObject plateKitchenObject;
-    
+    public static event EventHandler OnPickUpSomethingOnPlate;
     [Serializable]
     public struct PlateKitchenIngredientGameObject
     {
@@ -32,6 +32,7 @@ public class CompletePlateVisual : MonoBehaviour
             if (plateKitchenIngredientGameObject.kitchenObjectSO == e.kitchenObjectSO)
             {
                 plateKitchenIngredientGameObject.gameObject.SetActive(true);
+                OnPickUpSomethingOnPlate?.Invoke(this,EventArgs.Empty);
             }
         }
     }

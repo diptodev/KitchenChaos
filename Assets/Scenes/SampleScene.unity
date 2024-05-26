@@ -2158,6 +2158,51 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 862471617}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &865108874
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 865108876}
+  - component: {fileID: 865108875}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &865108875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 865108874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50c54f95922976448ac6e004c6e7eaeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClipSO: {fileID: 11400000, guid: 27355c60b9d74934589954494da0fed5, type: 2}
+--- !u!4 &865108876
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 865108874}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &874450262
 GameObject:
   m_ObjectHideFlags: 3
@@ -3091,6 +3136,16 @@ PrefabInstance:
       propertyPath: bar
       value: 
       objectReference: {fileID: 1070184428}
+    - target: {fileID: 2990228638803398066, guid: 1651bb758774c8a49aeeaae145fd4a22,
+        type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990228638803398066, guid: 1651bb758774c8a49aeeaae145fd4a22,
+        type: 3}
+      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5811048825113723583, guid: 1651bb758774c8a49aeeaae145fd4a22,
         type: 3}
       propertyPath: m_IsActive
@@ -3274,13 +3329,13 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 7a05dfef8ff133848b3b25408c74021c, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.481
+  m_Volume: 0.1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 0
+  Priority: 256
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -4627,3 +4682,4 @@ SceneRoots:
   - {fileID: 2088123524}
   - {fileID: 940775699}
   - {fileID: 1664966111}
+  - {fileID: 865108876}
