@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class DeliveryCounter : BaseCounter
 {
+
     public static event EventHandler OnDeliverSuccess;
     public static event EventHandler OnDeliverFailure;
     public override void Interact(Player player)

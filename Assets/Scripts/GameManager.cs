@@ -17,7 +17,8 @@ public class GameManager : MonoBehaviour
     private GameState state=GameState.WaitingToStart;
     private float waitingToStart = 1f;
     private float countDownToStart = 3f;
-    private float gamePlayingTimer = 10f;
+    private float gamePlayingTimer;
+    private float gamePlayingTimerMax = 30f;
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -37,12 +38,12 @@ public class GameManager : MonoBehaviour
         switch (state)
         {
             case GameState.WaitingToStart:
-                Debug.Log("Waiting to Start");
+               
                 if (waitingToStart<0f)
                 {
-                    Debug.Log("CountDownToStart");
+                    
                     state = GameState.CountDownToStart;
-                    OnStateChanged.Invoke(this, EventArgs.Empty);
+                    OnStateChanged?.Invoke(this, EventArgs.Empty);
                 }
                 else
                 {
@@ -52,9 +53,9 @@ public class GameManager : MonoBehaviour
             case GameState.CountDownToStart:
                 if (countDownToStart < 0f)
                 {
-                    Debug.Log("GameStart");
+                    gamePlayingTimer = gamePlayingTimerMax;
                     state = GameState.GameStart;
-                    OnStateChanged.Invoke(this, EventArgs.Empty);
+                    OnStateChanged?.Invoke(this, EventArgs.Empty);
                 }
                 else
                 {
@@ -64,8 +65,9 @@ public class GameManager : MonoBehaviour
             case GameState.GameStart:
                 if (gamePlayingTimer < 0f)
                 {
-                    Debug.Log("GameOver");
+                    
                     state = GameState.GameOver;
+                    OnStateChanged?.Invoke(this, EventArgs.Empty);
                 }
                 else
                 {
@@ -79,7 +81,7 @@ public class GameManager : MonoBehaviour
     }
     public void setTimer()
     {
-        gamePlayingTimer=10;
+        gamePlayingTimer=gamePlayingTimerMax;
     }
     public GameState GetCurrentGameState()
     {
@@ -87,7 +89,15 @@ public class GameManager : MonoBehaviour
     }
     public bool IsCountDownActive()
     {
-        return GameState.CountDownToStart == state;
+        return  state== GameState.CountDownToStart;
     }
     public float GetCountDownTimer() => countDownToStart;
+    public bool IsGameOver()
+    {
+        return state==GameState.GameOver;
+    }
+    public float GetRecipeTimeout()
+    {
+        return 1-(gamePlayingTimer / gamePlayingTimerMax);
+    }
 }

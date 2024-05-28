@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 
 public class DeliveryManager : MonoBehaviour
 {
+    private int totalRecipeDelivered=0;
     public event EventHandler onRecipeSpawned;
     public event EventHandler onRecipeCompleted;
     public static DeliveryManager instance {  get; private set; }
@@ -70,6 +71,7 @@ public class DeliveryManager : MonoBehaviour
                     
                     waitingRecipeSOList.RemoveAt(i);
                     currentWaitingRecipeNumber -= 1;
+                    totalRecipeDelivered++;
                     onRecipeCompleted.Invoke(this, EventArgs.Empty);
                     return true;
                 }
@@ -82,6 +84,10 @@ public class DeliveryManager : MonoBehaviour
     public List<KitchenReciepeSO> GetKitchenRecipeSOList()
     {
         return waitingRecipeSOList;
+    }
+    public int GetTotalDeliverdRecipe()
+    {
+        return totalRecipeDelivered;
     }
 }
 
