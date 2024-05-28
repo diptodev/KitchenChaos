@@ -22,12 +22,12 @@ public class StoveCounterSound : MonoBehaviour
         if (e.stoveState==StoveCounter.State.Frying || e.stoveState==StoveCounter.State.Burning)
         {
             audioSource.Play();
-            Debug.Log("Play ");
+            
         }
         else
         {
             audioSource.Pause();
-            Debug.Log("Stop ");
+           
         }
     }
 

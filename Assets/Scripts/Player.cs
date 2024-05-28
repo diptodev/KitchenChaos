@@ -33,7 +33,7 @@ public class Player : BaseCounter,IKitchenObject
 
     private void GameInput_onInteractionAlternateEvent(object sender, EventArgs e)
     {
-        if (selectedCounter !=null)
+        if (selectedCounter !=null && GameManager.GameState.GameStart==GameManager.Instance.GetCurrentGameState())
         {
             selectedCounter.AlternateInteract();
         }
@@ -41,7 +41,7 @@ public class Player : BaseCounter,IKitchenObject
 
     private void GameInput_onInteractionEvent(object sender, System.EventArgs e)
     {
-        if (selectedCounter !=null)
+        if (selectedCounter !=null && GameManager.GameState.GameStart == GameManager.Instance.GetCurrentGameState())
         {
             selectedCounter.Interact(this);
         }

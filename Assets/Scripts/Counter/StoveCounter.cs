@@ -140,7 +140,8 @@ public class StoveCounter : BaseCounter,IProgressBarUI
                     break;
                 case State.Default:
                     fireEffect.SetActive(false);
-                    Debug.Log("Please put it on the trash");
+                   // Debug.Log("Please put it on the trash");
+                   
                     break;
             }
         }
