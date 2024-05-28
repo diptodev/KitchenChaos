@@ -5,13 +5,16 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public static class SceneLoader  
 {
-  public enum SceneManagement
+  public enum SceneState
   {
     GameScene,
     MainMenuScene,
     LoadingScene
   }
-  public static void LoadScene(){
-    //SceneManagement.LoadScene(GameScene.toString());
+  public static void LoadNewScene(SceneState sceneState){
+        SceneManager.LoadScene(sceneState.ToString());
   }
+    public static void LoaderCallback ()  {
+        LoadNewScene(SceneState.GameScene);
+    }
 }
