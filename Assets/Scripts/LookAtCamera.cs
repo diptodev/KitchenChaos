@@ -15,6 +15,7 @@ public class LookAtCamera : MonoBehaviour
     [SerializeField] private Mode mode;
     private void Update()
     {
+        
         switch (mode)
         {
             case Mode.LookAt:
