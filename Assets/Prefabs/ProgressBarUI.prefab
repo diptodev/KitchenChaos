@@ -252,7 +252,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &4792936899418809831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,4 +283,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   progressBarImage: {fileID: 6897144037605234955}
+  bar: {fileID: 0}
   iProgressBarUIEventArgs: {fileID: 0}
