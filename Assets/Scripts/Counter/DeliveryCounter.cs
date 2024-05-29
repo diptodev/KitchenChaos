@@ -8,6 +8,10 @@ public class DeliveryCounter : BaseCounter
 
     public static event EventHandler OnDeliverSuccess;
     public static event EventHandler OnDeliverFailure;
+    public static void ClearStaticData(){
+ OnDeliverFailure=null;
+ OnDeliverSuccess=null;
+    }
     public override void Interact(Player player)
     {
         if (player.HasKitchenObject())

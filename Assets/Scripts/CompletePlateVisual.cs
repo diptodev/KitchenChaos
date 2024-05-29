@@ -5,37 +5,42 @@ using UnityEngine;
 
 public class CompletePlateVisual : MonoBehaviour
 {
-    [SerializeField]private PlateKitchenObject plateKitchenObject;
+    [SerializeField] private PlateKitchenObject plateKitchenObject;
     public static event EventHandler OnPickUpSomethingOnPlate;
+    public static void ClearStaticData()
+    {
+        OnPickUpSomethingOnPlate = null;
+    }
+
     [Serializable]
     public struct PlateKitchenIngredientGameObject
     {
-      public  KitchenObjectSO kitchenObjectSO;
-       public GameObject gameObject;
+        public KitchenObjectSO kitchenObjectSO;
+        public GameObject gameObject;
     }
     [SerializeField]
     private List<PlateKitchenIngredientGameObject> plateKitchenIngredientGameObjects;
     private void Start()
     {
-         
+
         plateKitchenObject.OnIngredientAdded += PlateKitchenObject_OnIngredientAdded;
-       
-       
+
+
     }
 
     private void PlateKitchenObject_OnIngredientAdded(object sender, PlateKitchenObject.OnIngredientAddedEventArgs e)
     {
-       
+
         foreach (PlateKitchenIngredientGameObject plateKitchenIngredientGameObject in plateKitchenIngredientGameObjects)
         {
-            
+
             if (plateKitchenIngredientGameObject.kitchenObjectSO == e.kitchenObjectSO)
             {
                 plateKitchenIngredientGameObject.gameObject.SetActive(true);
-                OnPickUpSomethingOnPlate?.Invoke(this,EventArgs.Empty);
+                OnPickUpSomethingOnPlate?.Invoke(this, EventArgs.Empty);
             }
         }
     }
 
-   
+
 }

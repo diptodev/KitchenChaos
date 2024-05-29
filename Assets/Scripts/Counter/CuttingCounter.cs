@@ -9,6 +9,9 @@ public class CuttingCounter : BaseCounter,IProgressBarUI
     public event EventHandler OnCuttingRecipeInteract;
     public event EventHandler<IProgressBarUI.OnIProgressBarUIEventArgs> OnIProgressBarUI;
     public static event EventHandler OnAnyCut;
+     public static new void ClearStaticData(){
+ OnAnyCut=null;
+    }
     public class OnCuttginCounterProgressBarEventArgs : EventArgs
     {
       public  float normalizedProgressBarValue;

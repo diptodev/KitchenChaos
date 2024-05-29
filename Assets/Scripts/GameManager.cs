@@ -6,7 +6,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public event EventHandler OnStateChanged;
-   public static GameManager Instance { get; private set; }
+    private bool isGamePause = false;
+    public static GameManager Instance { get; private set; }
     public enum GameState
     {
         WaitingToStart,
@@ -14,7 +15,7 @@ public class GameManager : MonoBehaviour
         GameStart,
         GameOver
     }
-    private GameState state=GameState.WaitingToStart;
+    private GameState state = GameState.WaitingToStart;
     private float waitingToStart = 1f;
     private float countDownToStart = 3f;
     private float gamePlayingTimer;
@@ -22,26 +23,16 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         if (Instance == null) Instance = this;
-        
-    }
-    void Start()
-    {
-        
-    }
 
- 
+    }
     void Update()
     {
-
-      
-      
         switch (state)
         {
             case GameState.WaitingToStart:
-               
-                if (waitingToStart<0f)
+                if (waitingToStart < 0f)
                 {
-                    
+
                     state = GameState.CountDownToStart;
                     OnStateChanged?.Invoke(this, EventArgs.Empty);
                 }
@@ -65,7 +56,7 @@ public class GameManager : MonoBehaviour
             case GameState.GameStart:
                 if (gamePlayingTimer < 0f)
                 {
-                    
+
                     state = GameState.GameOver;
                     OnStateChanged?.Invoke(this, EventArgs.Empty);
                 }
@@ -74,14 +65,14 @@ public class GameManager : MonoBehaviour
                     gamePlayingTimer -= Time.deltaTime;
                 }
                 break;
-                case GameState.GameOver:
-                
+            case GameState.GameOver:
+
                 break;
         }
     }
     public void setTimer()
     {
-        gamePlayingTimer=gamePlayingTimerMax;
+        gamePlayingTimer = gamePlayingTimerMax;
     }
     public GameState GetCurrentGameState()
     {
@@ -89,15 +80,27 @@ public class GameManager : MonoBehaviour
     }
     public bool IsCountDownActive()
     {
-        return  state== GameState.CountDownToStart;
+        return state == GameState.CountDownToStart;
     }
     public float GetCountDownTimer() => countDownToStart;
     public bool IsGameOver()
     {
-        return state==GameState.GameOver;
+        return state == GameState.GameOver;
     }
     public float GetRecipeTimeout()
     {
-        return 1-(gamePlayingTimer / gamePlayingTimerMax);
+        return 1 - (gamePlayingTimer / gamePlayingTimerMax);
+    }
+    public void TooglePauseGame()
+    {
+        isGamePause = !isGamePause;
+        if (isGamePause)
+        {
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Time.timeScale = 1f;
+        }
     }
 }

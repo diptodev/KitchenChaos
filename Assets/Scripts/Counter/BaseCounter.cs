@@ -9,6 +9,11 @@ public class BaseCounter : MonoBehaviour,IKitchenObject
     [SerializeField] private Transform topPoint;
     public static event EventHandler OnPickedUpSomething;
     public static event EventHandler OnDropedSomething;
+     public static void ClearStaticData(){
+ OnDropedSomething=null;
+ OnDropedSomething=null;
+    }
+
     public virtual void Interact(Player player)
     {
         Debug.LogError("Base Counter Interact call");
