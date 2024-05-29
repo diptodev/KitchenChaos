@@ -7,7 +7,7 @@ public class PlateCounter : BaseCounter
 {
 
     [SerializeField] KitchenObjectSO plateObjectSO;
- 
+
     float plateSpawnInterval = 0;
     float maxPlateSpawnIntervalTime = 4;
     float plateSpawnAmount = 0;
@@ -17,12 +17,12 @@ public class PlateCounter : BaseCounter
     private void Update()
     {
         plateSpawnInterval += Time.deltaTime;
-       // Debug.Log(plateSpawnInterval);
-        if (plateSpawnInterval>= maxPlateSpawnIntervalTime && plateSpawnAmount<=maxPlateSpawnAmount)
+        // Debug.Log(plateSpawnInterval);
+        if (plateSpawnInterval >= maxPlateSpawnIntervalTime && plateSpawnAmount <= maxPlateSpawnAmount)
         {
             plateSpawnInterval = 0;
             plateSpawnAmount++;
-            OnPlateSpawned?.Invoke(this,EventArgs.Empty);
+            OnPlateSpawned?.Invoke(this, EventArgs.Empty);
         }
 
     }
@@ -30,7 +30,7 @@ public class PlateCounter : BaseCounter
     {
         if (!player.HasKitchenObject())
         {
-            if (plateSpawnAmount>0)
+            if (plateSpawnAmount > 0)
             {
                 KitchenObject.SpawnKitchenObject(plateObjectSO, player);
                 OnSpawnedRemoved?.Invoke(this, EventArgs.Empty);

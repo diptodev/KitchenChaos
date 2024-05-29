@@ -1,12 +1,12 @@
 using System;
 using UnityEngine;
 
-public class StoveCounter : BaseCounter,IProgressBarUI
+public class StoveCounter : BaseCounter, IProgressBarUI
 {
     [SerializeField] private FryingRecipeSO[] fryingRecipeSOArray;
     [SerializeField] private GameObject fireEffect;
-    public  event EventHandler<StoveState> OnStoveStateChanged;
-    public class StoveState:EventArgs
+    public event EventHandler<StoveState> OnStoveStateChanged;
+    public class StoveState : EventArgs
     {
         public State stoveState;
     }
@@ -14,7 +14,7 @@ public class StoveCounter : BaseCounter,IProgressBarUI
     private float cookingTime;
     private float restingTime;
     private float burningTime;
- 
+
     public enum State
     {
         Idle,
@@ -39,7 +39,7 @@ public class StoveCounter : BaseCounter,IProgressBarUI
     }
     private void Update()
     {
-        
+
         if (kitchenObjectSO != null)
         {
 
@@ -56,7 +56,7 @@ public class StoveCounter : BaseCounter,IProgressBarUI
                     });
                     break;
                 case State.Frying:
-                  
+
                     if (cookingTime >= frying.maxCookedTime)
                     {
                         state = State.Fried;
@@ -65,13 +65,14 @@ public class StoveCounter : BaseCounter,IProgressBarUI
                             stoveState = State.Fried
                         });
                     }
-                    else {
+                    else
+                    {
                         cookingTime += Time.deltaTime;
                         OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
                         {
                             normalizedProgressBarValue = cookingTime / frying.maxCookedTime,
-                            modeColor="burning"
-                        }) ;
+                            modeColor = "burning"
+                        });
                     }
 
                     break;
@@ -85,9 +86,9 @@ public class StoveCounter : BaseCounter,IProgressBarUI
                     });
                     break;
                 case State.Resting:
-                  
-                    
-                    if (restingTime >=frying.maxRestingTime)
+
+
+                    if (restingTime >= frying.maxRestingTime)
                     {
                         state = State.Burning;
                         OnStoveStateChanged?.Invoke(this, new StoveState
@@ -101,12 +102,12 @@ public class StoveCounter : BaseCounter,IProgressBarUI
                         OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
                         {
                             normalizedProgressBarValue = restingTime / frying.maxRestingTime,
-                            modeColor="resting"
+                            modeColor = "resting"
                         });
                     }
                     break;
                 case State.Burning:
-                   
+
                     if (burningTime >= frying.maxBurningTime)
                     {
                         OnStoveStateChanged?.Invoke(this, new StoveState
@@ -122,7 +123,7 @@ public class StoveCounter : BaseCounter,IProgressBarUI
                         OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
                         {
                             normalizedProgressBarValue = burningTime / frying.maxBurningTime,
-                            modeColor="black"
+                            modeColor = "black"
                         });
                     }
                     break;
@@ -135,13 +136,13 @@ public class StoveCounter : BaseCounter,IProgressBarUI
                     state = State.Default;
                     OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
                     {
-                        normalizedProgressBarValue =0
+                        normalizedProgressBarValue = 0
                     });
                     break;
                 case State.Default:
                     fireEffect.SetActive(false);
-                   // Debug.Log("Please put it on the trash");
-                   
+                    // Debug.Log("Please put it on the trash");
+
                     break;
             }
         }
@@ -184,7 +185,7 @@ public class StoveCounter : BaseCounter,IProgressBarUI
             if (!player.HasKitchenObject())
             {
                 //ClearCounter has something and give it to the player
-                if (state==State.Burned || state==State.Default)
+                if (state == State.Burned || state == State.Default)
                 {
                     GetKitchenObject().SetIKitchenObjectParent(player);
                     ResetStove();
@@ -197,7 +198,7 @@ public class StoveCounter : BaseCounter,IProgressBarUI
             else
             {
                 //ClearCounter has something but player has also something
-                if (state == State.Fried || state == State.Resting || state == State.Burning || state==State.Default || state==State.Burned)
+                if (state == State.Fried || state == State.Resting || state == State.Burning || state == State.Default || state == State.Burned)
                 {
                     ResetStove();
                     if (player.GetKitchenObject().TryKitchenPlate(out PlateKitchenObject plateKitchenObject))
@@ -213,7 +214,7 @@ public class StoveCounter : BaseCounter,IProgressBarUI
                     }
                 }
             }
-            
+
         }
     }
     private void ResetStove()

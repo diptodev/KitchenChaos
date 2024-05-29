@@ -11,10 +11,10 @@ public class RecipeTimeout : MonoBehaviour
     void Update()
     {
         timeoutTime = GameManager.Instance.GetRecipeTimeout();
-        if (timeoutTime>=0)
+        if (timeoutTime >= 0)
         {
             timeoutImage.fillAmount = timeoutTime;
-            if (timeoutTime>0.65)
+            if (timeoutTime > 0.65)
             {
                 timeoutImage.color = Color.red;
             }

@@ -3,18 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CuttingCounter : BaseCounter,IProgressBarUI
+public class CuttingCounter : BaseCounter, IProgressBarUI
 {
     [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOArray;
     public event EventHandler OnCuttingRecipeInteract;
     public event EventHandler<IProgressBarUI.OnIProgressBarUIEventArgs> OnIProgressBarUI;
     public static event EventHandler OnAnyCut;
-     public static new void ClearStaticData(){
- OnAnyCut=null;
+    public static new void ClearStaticData()
+    {
+        OnAnyCut = null;
     }
     public class OnCuttginCounterProgressBarEventArgs : EventArgs
     {
-      public  float normalizedProgressBarValue;
+        public float normalizedProgressBarValue;
         public string modeColor;
     }
     private KitchenObjectSO kitchenObjectSO;
@@ -29,8 +30,9 @@ public class CuttingCounter : BaseCounter,IProgressBarUI
             if (player.HasKitchenObject())
             {
                 //Player has something and give it to the clearcounter
-                if (HasRecipeWithInput(player.GetKitchenObject().GetKitchenObjectSO())){
-                    currentCuttingProgress= 0;
+                if (HasRecipeWithInput(player.GetKitchenObject().GetKitchenObjectSO()))
+                {
+                    currentCuttingProgress = 0;
                     this.player = player;
                     player.GetKitchenObject().SetIKitchenObjectParent(this);
                     kitchenObjectSO = GetKitchenObject().GetKitchenObjectSO();
@@ -42,7 +44,7 @@ public class CuttingCounter : BaseCounter,IProgressBarUI
             }
             else
             {
-              
+
                 //Player has Nothing
             }
         }
@@ -53,7 +55,7 @@ public class CuttingCounter : BaseCounter,IProgressBarUI
             if (!player.HasKitchenObject())
             {
                 //ClearCounter has something and give it to the player
-                if (currentCuttingProgress>=maxCuttingProgress)
+                if (currentCuttingProgress >= maxCuttingProgress)
                 {
                     GetKitchenObject().SetIKitchenObjectParent(player);
                 }
@@ -66,7 +68,7 @@ public class CuttingCounter : BaseCounter,IProgressBarUI
                     if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
                     {
                         GetKitchenObject().DestroyKitchenObject();
-                       
+
                     }
                 }
                 //ClearCounter has something but player has also something
@@ -79,7 +81,7 @@ public class CuttingCounter : BaseCounter,IProgressBarUI
         {
             currentCuttingProgress++;
             maxCuttingProgress = GetSelectedCuttingRecipe(kitchenObjectSO).maxCuttingProgress;
-            if (kitchenObjectSO==GetKitchenObject()?.GetKitchenObjectSO())
+            if (kitchenObjectSO == GetKitchenObject()?.GetKitchenObjectSO())
             {
                 OnCuttingRecipeInteract.Invoke(this, EventArgs.Empty);
             }
@@ -87,15 +89,15 @@ public class CuttingCounter : BaseCounter,IProgressBarUI
             {
                 normalizedProgressBarValue = (float)currentCuttingProgress / maxCuttingProgress,
                 modeColor = "burning"
-            }) ;
+            });
             if (HasKitchenObject() && HasRecipeWithInput(kitchenObjectSO) && currentCuttingProgress >= maxCuttingProgress && !player.HasKitchenObject())
             {
                 KitchenObjectSO outputKitchenObject = GetKitchenObjectSO(kitchenObjectSO);
                 GetKitchenObject().DestroyKitchenObject();
                 KitchenObject.SpawnKitchenObject(outputKitchenObject, this);
-               
+
             }
-            if (currentCuttingProgress<=maxCuttingProgress)
+            if (currentCuttingProgress <= maxCuttingProgress)
             {
                 OnAnyCut.Invoke(this, EventArgs.Empty);
             }
@@ -122,5 +124,5 @@ public class CuttingCounter : BaseCounter,IProgressBarUI
         }
         return null;
     }
-     
+
 }

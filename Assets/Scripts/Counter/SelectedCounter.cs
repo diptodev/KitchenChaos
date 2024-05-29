@@ -10,16 +10,16 @@ public class SelectedCounter : MonoBehaviour
     [SerializeField] private GameObject[] selectedCounter;
 
 
-   
+
     void Start()
     {
         Player.playerInstance.OnSelectedCounterChanged += PlayerInstance_OnSelectedCounterChanged;
-       
+
     }
 
     private void PlayerInstance_OnSelectedCounterChanged(object sender, Player.OnSelectedCounterChangedEventArgs e)
     {
-        if (baseCounter==e.selectedCounter)
+        if (baseCounter == e.selectedCounter)
         {
             ShowClearCounterSelected();
         }
@@ -30,10 +30,11 @@ public class SelectedCounter : MonoBehaviour
     }
     private void ShowClearCounterSelected()
     {
-        foreach(GameObject selectedCounterObject in selectedCounter){
+        foreach (GameObject selectedCounterObject in selectedCounter)
+        {
             selectedCounterObject.SetActive(true);
         }
-        
+
     }
     private void HideClearCounterSelected()
     {
@@ -42,5 +43,5 @@ public class SelectedCounter : MonoBehaviour
             selectedCounterObject.SetActive(false);
         }
     }
-    
+
 }

@@ -12,12 +12,12 @@ public class ContainerCounter : BaseCounter
 
         if (!player.HasKitchenObject())
         {
-            KitchenObject.SpawnKitchenObject(kitchenObjectSO,player);
-            OnContainerCounterInteract?.Invoke(this,EventArgs.Empty);
+            KitchenObject.SpawnKitchenObject(kitchenObjectSO, player);
+            OnContainerCounterInteract?.Invoke(this, EventArgs.Empty);
         }
         else
         {
-          // GetKitchenObject().SetIKitchenObjectParent(player);
+            // GetKitchenObject().SetIKitchenObjectParent(player);
         }
     }
     public override void AlternateInteract()

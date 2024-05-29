@@ -22,5 +22,5 @@ public class CuttingCounterVisual : MonoBehaviour
         animator.SetTrigger(CUT);
     }
 
-     
+
 }

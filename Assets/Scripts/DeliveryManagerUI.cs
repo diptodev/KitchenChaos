@@ -12,36 +12,36 @@ public class DeliveryManagerUI : MonoBehaviour
     {
         DeliveryManager.instance.onRecipeSpawned += Delivery_onRecipeSpawned;
         DeliveryManager.instance.onRecipeCompleted += Delivery_onRecipeCompleted;
-         recipeTemplate.gameObject.SetActive(false);
+        recipeTemplate.gameObject.SetActive(false);
     }
 
     private void Delivery_onRecipeCompleted(object sender, System.EventArgs e)
     {
         Debug.Log("Deliver complete");
-        updateVisual();    
+        updateVisual();
     }
 
     private void Delivery_onRecipeSpawned(object sender, System.EventArgs e)
     {
-       
+
         updateVisual();
     }
 
-   
+
     public void updateVisual()
     {
         foreach (Transform child in container)
         {
-            if (child==recipeTemplate)
+            if (child == recipeTemplate)
             {
-                continue; 
+                continue;
             }
             Destroy(child.gameObject);
         }
         foreach (KitchenReciepeSO kitchenReciepeSO in DeliveryManager.instance.GetKitchenRecipeSOList())
         {
-           Transform recipeTransform= Instantiate(recipeTemplate, container);
-           recipeTransform.gameObject.SetActive(true);
+            Transform recipeTransform = Instantiate(recipeTemplate, container);
+            recipeTransform.gameObject.SetActive(true);
             recipeTransform.GetComponent<DeliverMangerSingleUI>().SetKitchenRecipeSO(kitchenReciepeSO);
         }
     }

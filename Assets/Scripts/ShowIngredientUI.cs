@@ -15,7 +15,7 @@ public class ShowIngredientUI : MonoBehaviour
     private void PlateKitchenObject_OnIngredientAdded(object sender, PlateKitchenObject.OnIngredientAddedEventArgs e)
     {
         UpdateVisual();
-        
+
     }
     private void UpdateVisual()
     {
@@ -27,8 +27,8 @@ public class ShowIngredientUI : MonoBehaviour
         }
         foreach (KitchenObjectSO kitchenObjectSO in plateKitchenObject.GetKitchenObjectList())
         {
-           Transform iconTransform= Instantiate(iconTemplate, transform);
-            
+            Transform iconTransform = Instantiate(iconTemplate, transform);
+
             iconTransform.GetComponent<IconTemplate>().SetIngredientIcon(kitchenObjectSO);
             iconTransform.gameObject.SetActive(true);
         }

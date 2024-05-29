@@ -3,23 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : BaseCounter,IKitchenObject
+public class Player : BaseCounter, IKitchenObject
 {
     [SerializeField] private GameInput gameInput;
     [SerializeField] private LayerMask counterLayerMask;
-    private float moveSpeed=5f;
+    private float moveSpeed = 5f;
     private float rotateSpeed = 15f;
     private bool isWalking = false;
-    private bool canMove=false;
-    private Vector3 updatedMoveDir=Vector3.zero;
+    private bool canMove = false;
+    private Vector3 updatedMoveDir = Vector3.zero;
     private BaseCounter selectedCounter;
-   
-    public static Player playerInstance {  get; private set; }
+
+    public static Player playerInstance { get; private set; }
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
-   
+
     public class OnSelectedCounterChangedEventArgs : EventArgs
     {
-      public  BaseCounter selectedCounter;
+        public BaseCounter selectedCounter;
     }
 
 
@@ -33,7 +33,7 @@ public class Player : BaseCounter,IKitchenObject
 
     private void GameInput_onInteractionAlternateEvent(object sender, EventArgs e)
     {
-        if (selectedCounter !=null && GameManager.GameState.GameStart==GameManager.Instance.GetCurrentGameState())
+        if (selectedCounter != null && GameManager.GameState.GameStart == GameManager.Instance.GetCurrentGameState())
         {
             selectedCounter.AlternateInteract();
         }
@@ -41,7 +41,7 @@ public class Player : BaseCounter,IKitchenObject
 
     private void GameInput_onInteractionEvent(object sender, System.EventArgs e)
     {
-        if (selectedCounter !=null && GameManager.GameState.GameStart == GameManager.Instance.GetCurrentGameState())
+        if (selectedCounter != null && GameManager.GameState.GameStart == GameManager.Instance.GetCurrentGameState())
         {
             selectedCounter.Interact(this);
         }
@@ -50,8 +50,8 @@ public class Player : BaseCounter,IKitchenObject
     void Update()
     {
 
-      HandleMovement();
-      HandleInteraction();
+        HandleMovement();
+        HandleInteraction();
     }
     private void HandleInteraction()
     {
@@ -62,7 +62,7 @@ public class Player : BaseCounter,IKitchenObject
             updatedMoveDir = moveDir;
         }
         float interactDistance = 1f;
-        if (Physics.Raycast(transform.position, updatedMoveDir, out RaycastHit raycastHit, interactDistance,counterLayerMask))
+        if (Physics.Raycast(transform.position, updatedMoveDir, out RaycastHit raycastHit, interactDistance, counterLayerMask))
         {
             if (raycastHit.transform.TryGetComponent(out BaseCounter baseCounter))
             {
@@ -84,7 +84,7 @@ public class Player : BaseCounter,IKitchenObject
         Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
         float playerRadius = 0.7f;
         float playerHeight = 2f;
-        float moveDistance = moveSpeed *Time.deltaTime;
+        float moveDistance = moveSpeed * Time.deltaTime;
         isWalking = moveDir != Vector3.zero;
 
         canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDir, moveDistance);
@@ -92,7 +92,7 @@ public class Player : BaseCounter,IKitchenObject
         {
             //Attempt to move towards X
             Vector3 moveDirX = new Vector3(moveDir.x, 0f, 0f).normalized;
-            canMove =moveDirX!=Vector3.zero && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirX, moveDistance);
+            canMove = moveDirX != Vector3.zero && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirX, moveDistance);
             if (canMove)
             {
                 moveDir = moveDirX;

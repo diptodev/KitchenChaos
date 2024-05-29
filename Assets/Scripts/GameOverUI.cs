@@ -18,7 +18,7 @@ public class GameOverUI : MonoBehaviour
         if (GameManager.Instance.IsGameOver())
         {
             Show();
-            textMeshProRecipeDelivered.text=DeliveryManager.instance.GetTotalDeliverdRecipe().ToString();
+            textMeshProRecipeDelivered.text = DeliveryManager.instance.GetTotalDeliverdRecipe().ToString();
         }
         else
         {

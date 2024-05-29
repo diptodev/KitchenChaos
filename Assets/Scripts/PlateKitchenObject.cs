@@ -11,7 +11,7 @@ public class PlateKitchenObject : KitchenObject
     public event EventHandler<OnIngredientAddedEventArgs> OnIngredientAdded;
     public class OnIngredientAddedEventArgs : EventArgs
     {
-       public KitchenObjectSO kitchenObjectSO;
+        public KitchenObjectSO kitchenObjectSO;
     }
     private void Start()
     {
@@ -25,7 +25,7 @@ public class PlateKitchenObject : KitchenObject
             OnIngredientAdded.Invoke(this, new OnIngredientAddedEventArgs()
             {
                 kitchenObjectSO = _kitchenObjectSO
-            }) ;
+            });
             return true;
         }
         return false;

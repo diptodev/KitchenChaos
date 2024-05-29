@@ -18,7 +18,7 @@ public class DeliverMangerSingleUI : MonoBehaviour
         recipeTitle.text = kitchenReciepeSO.recipeName;
         foreach (Transform child in iconContainer)
         {
-            if (child==iconImage)
+            if (child == iconImage)
             {
                 continue;
             }
@@ -26,7 +26,7 @@ public class DeliverMangerSingleUI : MonoBehaviour
         }
         foreach (KitchenObjectSO kitchenObjectSO in kitchenReciepeSO.kitchenRecipeSO)
         {
-          Transform transform=  Instantiate(iconImage, iconContainer);
+            Transform transform = Instantiate(iconImage, iconContainer);
             transform.GetComponent<Image>().sprite = kitchenObjectSO.sprite;
             transform.gameObject.SetActive(true);
         }

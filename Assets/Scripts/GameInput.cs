@@ -10,8 +10,9 @@ public class GameInput : MonoBehaviour
     public event EventHandler onInteractionEvent;
     public event EventHandler onInteractionAlternateEvent;
     public static event EventHandler onGamePauseEvent;
-    public static void ClearStaticData(){
-onGamePauseEvent=null;
+    public static void ClearStaticData()
+    {
+        onGamePauseEvent = null;
     }
     private void Awake()
     {

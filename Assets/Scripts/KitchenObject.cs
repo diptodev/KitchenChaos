@@ -10,7 +10,7 @@ public class KitchenObject : MonoBehaviour
     public KitchenObjectSO GetKitchenObjectSO() { return kitchenObjectSO; }
     public void SetIKitchenObjectParent(IKitchenObject iKitchenObjectParent)
     {
-        if (this.iKitchenObjectParent!=null)
+        if (this.iKitchenObjectParent != null)
         {
             this.iKitchenObjectParent.ClearKitchenObject();
         }
@@ -32,7 +32,7 @@ public class KitchenObject : MonoBehaviour
     {
         Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefabVisuals);
         kitchenObjectTransform.localPosition = Vector3.zero;
-      KitchenObject kitchenObject=  kitchenObjectTransform.GetComponent<KitchenObject>();
+        KitchenObject kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
         kitchenObject.SetIKitchenObjectParent(iKitchenObject);
         return kitchenObject;
     }
@@ -40,7 +40,7 @@ public class KitchenObject : MonoBehaviour
     {
         if (this is PlateKitchenObject)
         {
-             plateKitchenObject =this as PlateKitchenObject;
+            plateKitchenObject = this as PlateKitchenObject;
             return true;
         }
         plateKitchenObject = null;
