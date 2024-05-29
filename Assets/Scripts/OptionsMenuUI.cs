@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class OptionsMenuUI : MonoBehaviour
 {
+    [SerializeField] private GameObject keyRebindUI;
     [SerializeField] private Button buttonSoundEffectsVol;
     [SerializeField] private Button buttonMusicVol;
     [SerializeField] private Button buttonClose;
@@ -19,16 +20,13 @@ public class OptionsMenuUI : MonoBehaviour
     [SerializeField] private Button buttonEscape;
     [SerializeField] private Text txtsoundEffectsVol;
     [SerializeField] private Text txtMusicVol;
-    public enum Binding
-    {
-        MoveUp,
-        MoveDown,
-        MoveLeft,
-        MoveRigt,
-        Interact,
-        AlterInteract,
-        Escape
-    }
+    [SerializeField] private Text txtMoveUp;
+    [SerializeField] private Text txtMoveDown;
+    [SerializeField] private Text txtMoveLeft;
+    [SerializeField] private Text txtMoveRight;
+    [SerializeField] private Text txtInteract;
+    [SerializeField] private Text txtAlternativeInteract;
+    [SerializeField] private Text txtEscape;
     private void Awake()
     {
         gameObject.SetActive(false);
@@ -37,41 +35,48 @@ public class OptionsMenuUI : MonoBehaviour
         buttonClose.onClick.AddListener(CloseUI);
         buttonMoveUp.onClick.AddListener(() =>
         {
-            ChangeKeyBinding(Binding.MoveUp);
+            ChangeKeyBinding(GameInput.Binding.MoveUp);
         });
         buttonMoveDown.onClick.AddListener(() =>
         {
-            ChangeKeyBinding(Binding.MoveDown);
+            ChangeKeyBinding(GameInput.Binding.MoveDown);
         });
         buttonMoveLeft.onClick.AddListener(() =>
         {
-            ChangeKeyBinding(Binding.MoveLeft);
+            ChangeKeyBinding(GameInput.Binding.MoveLeft);
         });
         buttonMoveRight.onClick.AddListener(() =>
         {
-            ChangeKeyBinding(Binding.MoveRigt);
+            ChangeKeyBinding(GameInput.Binding.MoveRigt);
         });
         buttonInteract.onClick.AddListener(() =>
         {
-            ChangeKeyBinding(Binding.Interact);
+            ChangeKeyBinding(GameInput.Binding.Interact);
         });
         buttonAlterInteract.onClick.AddListener(() =>
         {
-            ChangeKeyBinding(Binding.AlterInteract);
+            ChangeKeyBinding(GameInput.Binding.AlterInteract);
         });
         buttonEscape.onClick.AddListener(() =>
         {
-            ChangeKeyBinding(Binding.Escape);
+            ChangeKeyBinding(GameInput.Binding.Escape);
         });
 
     }
     void Start()
     {
         UpdateVisual();
+        HideRebindingUI();
     }
 
-    public void ChangeKeyBinding(Binding binding)
+    public void ChangeKeyBinding(GameInput.Binding binding)
     {
+        ShowRebindingUI();
+        GameInput.instance.ChangeKeyBinding(binding, () =>
+        {
+            HideRebindingUI();
+            UpdateVisual();
+        });
 
     }
     private void SoundEffectVol()
@@ -83,6 +88,13 @@ public class OptionsMenuUI : MonoBehaviour
     {
         txtsoundEffectsVol.text = "Sound Effects Vol : " + Math.Ceiling(SoundManager.instance.GetVolume() * 10).ToString();
         txtMusicVol.text = "Music Vol : " + Math.Ceiling(MusicManager.instance.GetMusicVolume() * 10).ToString();
+        txtMoveUp.text = GameInput.instance.GetKeyBinding(GameInput.Binding.MoveUp);
+        txtMoveDown.text = GameInput.instance.GetKeyBinding(GameInput.Binding.MoveDown);
+        txtMoveLeft.text = GameInput.instance.GetKeyBinding(GameInput.Binding.MoveLeft);
+        txtMoveRight.text = GameInput.instance.GetKeyBinding(GameInput.Binding.MoveRigt);
+        txtInteract.text = GameInput.instance.GetKeyBinding(GameInput.Binding.Interact);
+        txtAlternativeInteract.text = GameInput.instance.GetKeyBinding(GameInput.Binding.AlterInteract);
+        txtEscape.text = GameInput.instance.GetKeyBinding(GameInput.Binding.Escape);
     }
     private void MusicVol()
     {
@@ -92,5 +104,13 @@ public class OptionsMenuUI : MonoBehaviour
     private void CloseUI()
     {
         gameObject.SetActive(false);
+    }
+    private void HideRebindingUI()
+    {
+        keyRebindUI.SetActive(false);
+    }
+    private void ShowRebindingUI()
+    {
+        keyRebindUI.SetActive(true);
     }
 }
