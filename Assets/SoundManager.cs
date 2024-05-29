@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    [SerializeField]private SoundListSO audioClipSO;
+    [SerializeField] private SoundListSO audioClipSO;
+    private const string SOUND_MANAGER_PLAYER_PREFS = "SoundManagerPlayerRefs";
+    private float volume;
     public static SoundManager instance;
     private void Awake()
     {
@@ -19,15 +21,15 @@ public class SoundManager : MonoBehaviour
         BaseCounter.OnPickedUpSomething += BaseCounter_OnPickedUpSomething;
         BaseCounter.OnDropedSomething += BaseCounter_OnDropedSomething;
         CompletePlateVisual.OnPickUpSomethingOnPlate += CompletePlateVisual_OnPickUpSomethingOnPlate;
-        
+        volume = PlayerPrefs.GetFloat(SOUND_MANAGER_PLAYER_PREFS, 1f);
     }
 
- 
+
 
     private void CompletePlateVisual_OnPickUpSomethingOnPlate(object sender, System.EventArgs e)
     {
         CompletePlateVisual completePlateVisual = (CompletePlateVisual)sender;
-        PlayMusic(audioClipSO.objectDrop,completePlateVisual.transform.position );
+        PlayMusic(audioClipSO.objectDrop, completePlateVisual.transform.position);
     }
 
     private void BaseCounter_OnDropedSomething(object sender, System.EventArgs e)
@@ -42,7 +44,7 @@ public class SoundManager : MonoBehaviour
 
     private void CuttingCounter_OnAnyCut(object sender, System.EventArgs e)
     {
-       CuttingCounter cuttingCounter = (CuttingCounter)sender;
+        CuttingCounter cuttingCounter = (CuttingCounter)sender;
         PlayMusic(audioClipSO.chop, cuttingCounter.transform.position);
     }
 
@@ -54,7 +56,7 @@ public class SoundManager : MonoBehaviour
 
     private void DeliveryCounter_OnDeliverSuccess(object sender, System.EventArgs e)
     {
-         DeliveryCounter deliveryCounter = (DeliveryCounter)sender;
+        DeliveryCounter deliveryCounter = (DeliveryCounter)sender;
         PlayMusic(audioClipSO.deliverSuccess, deliveryCounter.transform.position);
     }
 
@@ -64,12 +66,26 @@ public class SoundManager : MonoBehaviour
         PlayMusic(audioClipSO.deliverFailure, deliveryCounter.transform.position);
     }
 
-    private void PlayMusic(AudioClip[] audioClipArray, Vector3 position,float vol=1f)
+    private void PlayMusic(AudioClip[] audioClipArray, Vector3 position, float vol = 1f)
     {
-        AudioSource.PlayClipAtPoint(audioClipArray[Random.Range(0,audioClipArray.Length)],position,vol);
+        AudioSource.PlayClipAtPoint(audioClipArray[Random.Range(0, audioClipArray.Length)], position, vol * volume);
     }
     public void PlayMusicForPlayer(Vector3 position)
     {
         PlayMusic(audioClipSO.footStep, position);
+    }
+    public void ChangeVolume()
+    {
+        volume += 0.1f;
+        if (volume > 1)
+        {
+            volume = 0;
+        }
+        PlayerPrefs.SetFloat(SOUND_MANAGER_PLAYER_PREFS, volume);
+        PlayerPrefs.Save();
+    }
+    public float GetVolume()
+    {
+        return volume;
     }
 }

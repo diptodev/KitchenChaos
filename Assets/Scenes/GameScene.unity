@@ -436,7 +436,7 @@ GameObject:
   - component: {fileID: 200113790}
   - component: {fileID: 200113789}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: MusicVolText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2869,7 +2869,7 @@ GameObject:
   - component: {fileID: 594954635}
   - component: {fileID: 594954634}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: SoundEffectText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5314,8 +5314,8 @@ MonoBehaviour:
   buttonInteract: {fileID: 1122043039}
   buttonAlterInteract: {fileID: 1363186332}
   buttonEscape: {fileID: 1792735157}
-  TxtsoundEffectsVol: {fileID: 0}
-  TxtMusicVol: {fileID: 0}
+  txtsoundEffectsVol: {fileID: 594954634}
+  txtMusicVol: {fileID: 200113789}
 --- !u!1 &1070184428 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 987877766126280769, guid: 1651bb758774c8a49aeeaae145fd4a22,
@@ -6900,6 +6900,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1430136221}
   - component: {fileID: 1430136220}
+  - component: {fileID: 1430136222}
   m_Layer: 0
   m_Name: MusicManager
   m_TagString: Untagged
@@ -7018,6 +7019,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 166807529}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1430136222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430136219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9699d36bfc37004aa1973ef72730b32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1431835272
 PrefabInstance:
   m_ObjectHideFlags: 0

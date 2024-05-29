@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -16,8 +17,8 @@ public class OptionsMenuUI : MonoBehaviour
     [SerializeField] private Button buttonInteract;
     [SerializeField] private Button buttonAlterInteract;
     [SerializeField] private Button buttonEscape;
-    [SerializeField] private TextMeshProUGUI TxtsoundEffectsVol;
-    [SerializeField] private TextMeshProUGUI TxtMusicVol;
+    [SerializeField] private Text txtsoundEffectsVol;
+    [SerializeField] private Text txtMusicVol;
     public enum Binding
     {
         MoveUp,
@@ -66,25 +67,27 @@ public class OptionsMenuUI : MonoBehaviour
     }
     void Start()
     {
-
+        UpdateVisual();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     public void ChangeKeyBinding(Binding binding)
     {
 
     }
     private void SoundEffectVol()
     {
-
+        SoundManager.instance.ChangeVolume();
+        UpdateVisual();
+    }
+    private void UpdateVisual()
+    {
+        txtsoundEffectsVol.text = "Sound Effects Vol : " + Math.Ceiling(SoundManager.instance.GetVolume() * 10).ToString();
+        txtMusicVol.text = "Music Vol : " + Math.Ceiling(MusicManager.instance.GetMusicVolume() * 10).ToString();
     }
     private void MusicVol()
     {
-
+        MusicManager.instance.ChangeVolume();
+        UpdateVisual();
     }
     private void CloseUI()
     {
