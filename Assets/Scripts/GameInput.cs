@@ -58,13 +58,48 @@ public class GameInput : MonoBehaviour
         inputActions.Player.PauseGame.performed -= PauseGame_performed;
         inputActions.Dispose();
     }
-    public void ChangeKeyBinding(Binding binding, Action onReboundHide)
+    public void ChangeKeyBinding(Binding binding, Action onRebindCallback)
     {
+        int bindingIndex;
+        InputAction inputAction;
+        switch (binding)
+        {
+            default:
+            case Binding.MoveUp:
+                bindingIndex = 6;
+                inputAction = inputActions.Player.Move;
+                break;
+            case Binding.MoveDown:
+                bindingIndex = 7;
+                inputAction = inputActions.Player.Move;
+                break;
+            case Binding.MoveLeft:
+                bindingIndex = 8;
+                inputAction = inputActions.Player.Move;
+                break;
+            case Binding.MoveRigt:
+                bindingIndex = 9;
+                inputAction = inputActions.Player.Move;
+                break;
+            case Binding.Interact:
+                bindingIndex = 0;
+                inputAction = inputActions.Player.Interact;
+                break;
+            case Binding.AlterInteract:
+                bindingIndex = 0;
+                inputAction = inputActions.Player.InteractAlternate;
+                break;
+            case Binding.Escape:
+                bindingIndex = 0;
+                inputAction = inputActions.Player.PauseGame;
+                break;
+
+        }
         inputActions.Player.Disable();
-        inputActions.Player.Move.PerformInteractiveRebinding(6).OnComplete((callback) =>
+        inputAction.PerformInteractiveRebinding(bindingIndex).OnComplete((callback) =>
         {
             inputActions.Player.Enable();
-            onReboundHide();
+            onRebindCallback();
         }).Start();
     }
     public string GetKeyBinding(Binding binding)
