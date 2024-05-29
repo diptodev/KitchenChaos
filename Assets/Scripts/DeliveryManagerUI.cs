@@ -17,7 +17,7 @@ public class DeliveryManagerUI : MonoBehaviour
 
     private void Delivery_onRecipeCompleted(object sender, System.EventArgs e)
     {
-        Debug.Log("Deliver complete");
+
         updateVisual();
     }
 

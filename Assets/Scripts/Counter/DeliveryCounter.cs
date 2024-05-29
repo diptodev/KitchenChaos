@@ -27,7 +27,7 @@ public class DeliveryCounter : BaseCounter
                 }
                 else
                 {
-                    Debug.Log("Wrong Recipe");
+
                     OnDeliverFailure.Invoke(this, EventArgs.Empty);
                 }
 
@@ -35,7 +35,7 @@ public class DeliveryCounter : BaseCounter
             }
             else
             {
-                Debug.Log("Recipe not completed");
+                //If recipe is not completed it goes here
             }
         }
     }
