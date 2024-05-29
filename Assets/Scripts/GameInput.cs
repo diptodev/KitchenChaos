@@ -12,6 +12,7 @@ public class GameInput : MonoBehaviour
     public event EventHandler onInteractionEvent;
     public event EventHandler onInteractionAlternateEvent;
     public static event EventHandler onGamePauseEvent;
+    private const string PLAYER_PREFS_BINDING = "PlayerPrefsBinding";
     public enum Binding
     {
         MoveUp,
@@ -28,12 +29,18 @@ public class GameInput : MonoBehaviour
     }
     private void Awake()
     {
+
         instance = this;
         inputActions = new InputActions();
+        if (PlayerPrefs.HasKey(PLAYER_PREFS_BINDING))
+        {
+            inputActions.LoadBindingOverridesFromJson(PlayerPrefs.GetString(PLAYER_PREFS_BINDING));
+        }
         inputActions.Player.Enable();
         inputActions.Player.Interact.performed += Interact_performed;
         inputActions.Player.InteractAlternate.performed += InteractAlternate_performed;
         inputActions.Player.PauseGame.performed += PauseGame_performed;
+
     }
     private void PauseGame_performed(UnityEngine.InputSystem.InputAction.CallbackContext callbackContext)
     {
@@ -100,7 +107,10 @@ public class GameInput : MonoBehaviour
         {
             inputActions.Player.Enable();
             onRebindCallback();
+            PlayerPrefs.SetString(PLAYER_PREFS_BINDING, inputActions.SaveBindingOverridesAsJson());
+            PlayerPrefs.Save();
         }).Start();
+
     }
     public string GetKeyBinding(Binding binding)
     {
