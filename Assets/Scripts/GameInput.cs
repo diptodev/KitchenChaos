@@ -25,6 +25,7 @@ public class GameInput : MonoBehaviour
     private void PauseGame_performed(UnityEngine.InputSystem.InputAction.CallbackContext callbackContext)
     {
         onGamePauseEvent?.Invoke(this, EventArgs.Empty);
+        Debug.Log("Preformed");
     }
     private void InteractAlternate_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
@@ -37,4 +38,11 @@ public class GameInput : MonoBehaviour
     }
 
     public Vector2 GetNormalizedInput => inputActions.Player.Move.ReadValue<Vector2>().normalized;
+    private void OnDestroy()
+    {
+        inputActions.Player.Interact.performed -= Interact_performed;
+        inputActions.Player.InteractAlternate.performed -= InteractAlternate_performed;
+        inputActions.Player.PauseGame.performed -= PauseGame_performed;
+        inputActions.Dispose();
+    }
 }

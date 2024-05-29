@@ -8,11 +8,16 @@ public class GamePauseUI : MonoBehaviour
 {
     [SerializeField] private Button buttonResume;
     [SerializeField] private Button mainMenu;
+    [SerializeField] private Button buttonOptions;
+    [SerializeField] private GameObject optionsMenu;
     private bool gamePauseStatus;
+    private bool isOptionsLoaded;
     private void Awake()
     {
         buttonResume.onClick.AddListener(ResumeGame);
         mainMenu.onClick.AddListener(LoadMainmenu);
+        buttonOptions.onClick.AddListener(LoadOptions);
+        isOptionsLoaded = false;
     }
     private void Start()
     {
@@ -39,6 +44,9 @@ public class GamePauseUI : MonoBehaviour
     {
         SceneLoader.LoadNewScene(SceneLoader.SceneState.MainMenuScene);
     }
-    // Update is called once per frame
-
+    private void LoadOptions()
+    {
+        isOptionsLoaded = !isOptionsLoaded;
+        optionsMenu.SetActive(isOptionsLoaded);
+    }
 }
