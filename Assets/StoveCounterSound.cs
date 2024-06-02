@@ -18,16 +18,16 @@ public class StoveCounterSound : MonoBehaviour
 
     private void StoveCounter_OnStoveStateChanged(object sender, StoveCounter.StoveState e)
     {
-       
-        if (e.stoveState==StoveCounter.State.Frying || e.stoveState==StoveCounter.State.Burning)
+
+        if (e.stoveState == StoveCounter.State.Frying || e.stoveState == StoveCounter.State.Burning)
         {
             audioSource.Play();
-            
+
         }
         else
         {
             audioSource.Pause();
-           
+
         }
     }
 

@@ -5,18 +5,20 @@ using UnityEngine.UI;
 
 public class ProgressBarUI : MonoBehaviour
 {
-   // [SerializeField] ProgressBarUI progressBarUI;
+    // [SerializeField] ProgressBarUI progressBarUI;
     [SerializeField] Image progressBarImage;
     [SerializeField] GameObject bar;
     [SerializeField] GameObject iProgressBarUIEventArgs;
+
     private IProgressBarUI progressBarUI;
+
     private void Start()
     {
-        progressBarUI= iProgressBarUIEventArgs.GetComponent<IProgressBarUI>();
+        progressBarUI = iProgressBarUIEventArgs.GetComponent<IProgressBarUI>();
         progressBarUI.OnIProgressBarUI += ProgressBarUI_OnIProgressBarUI;
         progressBarImage.fillAmount = 0;
         Hide();
-       
+
     }
 
     private void ProgressBarUI_OnIProgressBarUI(object sender, IProgressBarUI.OnIProgressBarUIEventArgs e)
@@ -28,17 +30,18 @@ public class ProgressBarUI : MonoBehaviour
         }
         else
         {
-            
-                Show(e.modeColor);
-             
+
+            Show(e.modeColor);
+
         }
     }
     private void Show(string color)
     {
-        if (color == "burning") {
+        if (color == "burning")
+        {
             progressBarImage.color = Color.yellow;
         }
-        else if(color =="resting")
+        else if (color == "resting")
         {
             progressBarImage.color = Color.green;
         }
