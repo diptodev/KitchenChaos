@@ -10,6 +10,7 @@ public class DeliveryManager : MonoBehaviour
     private int totalRecipeDelivered = 0;
     public event EventHandler onRecipeSpawned;
     public event EventHandler onRecipeCompleted;
+    public event EventHandler onRecipeFailure;
     public static DeliveryManager instance { get; private set; }
     private List<KitchenReciepeSO> waitingRecipeSOList;
     [SerializeField] private KitchenRecipeSOList mkitchenRecipeSO;
@@ -33,7 +34,7 @@ public class DeliveryManager : MonoBehaviour
                 currentSpawnedTime = 0;
                 KitchenReciepeSO kitchenReciepeSO = mkitchenRecipeSO.kitchenReciepeSOList[UnityEngine.Random.Range(0, mkitchenRecipeSO.kitchenReciepeSOList.Count)];
                 waitingRecipeSOList.Add(kitchenReciepeSO);
-                onRecipeSpawned.Invoke(this, EventArgs.Empty);
+                onRecipeSpawned?.Invoke(this, EventArgs.Empty);
             }
 
         }
@@ -72,8 +73,12 @@ public class DeliveryManager : MonoBehaviour
                     waitingRecipeSOList.RemoveAt(i);
                     currentWaitingRecipeNumber -= 1;
                     totalRecipeDelivered++;
-                    onRecipeCompleted.Invoke(this, EventArgs.Empty);
+                    onRecipeCompleted?.Invoke(this, EventArgs.Empty);
                     return true;
+                }
+                else
+                {
+                    onRecipeFailure?.Invoke(this, EventArgs.Empty);
                 }
 
             }

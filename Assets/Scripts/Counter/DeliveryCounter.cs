@@ -6,12 +6,12 @@ using UnityEngine;
 public class DeliveryCounter : BaseCounter
 {
 
-    public static event EventHandler OnDeliverSuccess;
-    public static event EventHandler OnDeliverFailure;
+    public event EventHandler OnDeliverSuccess;
+    public event EventHandler OnDeliverFailure;
     public static new void ClearStaticData()
     {
-        OnDeliverFailure = null;
-        OnDeliverSuccess = null;
+        // OnDeliverFailure = null;
+        // OnDeliverSuccess = null;
     }
     public override void Interact(Player player)
     {

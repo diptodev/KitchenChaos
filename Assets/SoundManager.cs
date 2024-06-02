@@ -5,6 +5,7 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
     [SerializeField] private SoundListSO audioClipSO;
+    [SerializeField] private DeliveryCounter deliveryCounter;
     private const string SOUND_MANAGER_PLAYER_PREFS = "SoundManagerPlayerRefs";
     private float volume;
     public static SoundManager instance;
@@ -14,8 +15,8 @@ public class SoundManager : MonoBehaviour
     }
     private void Start()
     {
-        DeliveryCounter.OnDeliverFailure += DeliveryCounter_OnDeliverFailure;
-        DeliveryCounter.OnDeliverSuccess += DeliveryCounter_OnDeliverSuccess;
+        deliveryCounter.OnDeliverFailure += DeliveryCounter_OnDeliverFailure;
+        deliveryCounter.OnDeliverSuccess += DeliveryCounter_OnDeliverSuccess;
         TrashCounter.OnItemTrashed += TrashCounter_OnItemTrashed;
         CuttingCounter.OnAnyCut += CuttingCounter_OnAnyCut;
         BaseCounter.OnPickedUpSomething += BaseCounter_OnPickedUpSomething;
