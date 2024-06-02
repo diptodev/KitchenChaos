@@ -35,31 +35,31 @@ public class OptionsMenuUI : MonoBehaviour
         buttonClose.onClick.AddListener(CloseUI);
         buttonMoveUp.onClick.AddListener(() =>
         {
-            ChangeKeyBinding(GameInput.Binding.MoveUp);
+            ChangeKeyBindingFunc(GameInput.Binding.MoveUp);
         });
         buttonMoveDown.onClick.AddListener(() =>
         {
-            ChangeKeyBinding(GameInput.Binding.MoveDown);
+            ChangeKeyBindingFunc(GameInput.Binding.MoveDown);
         });
         buttonMoveLeft.onClick.AddListener(() =>
         {
-            ChangeKeyBinding(GameInput.Binding.MoveLeft);
+            ChangeKeyBindingFunc(GameInput.Binding.MoveLeft);
         });
         buttonMoveRight.onClick.AddListener(() =>
         {
-            ChangeKeyBinding(GameInput.Binding.MoveRigt);
+            ChangeKeyBindingFunc(GameInput.Binding.MoveRigt);
         });
         buttonInteract.onClick.AddListener(() =>
         {
-            ChangeKeyBinding(GameInput.Binding.Interact);
+            ChangeKeyBindingFunc(GameInput.Binding.Interact);
         });
         buttonAlterInteract.onClick.AddListener(() =>
         {
-            ChangeKeyBinding(GameInput.Binding.AlterInteract);
+            ChangeKeyBindingFunc(GameInput.Binding.AlterInteract);
         });
         buttonEscape.onClick.AddListener(() =>
         {
-            ChangeKeyBinding(GameInput.Binding.Escape);
+            ChangeKeyBindingFunc(GameInput.Binding.Escape);
         });
 
     }
@@ -69,7 +69,7 @@ public class OptionsMenuUI : MonoBehaviour
         HideRebindingUI();
     }
 
-    public void ChangeKeyBinding(GameInput.Binding binding)
+    public void ChangeKeyBindingFunc(GameInput.Binding binding)
     {
         ShowRebindingUI();
         GameInput.instance.ChangeKeyBinding(binding, () =>

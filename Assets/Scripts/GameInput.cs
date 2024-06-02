@@ -109,6 +109,7 @@ public class GameInput : MonoBehaviour
             onRebindCallback();
             PlayerPrefs.SetString(PLAYER_PREFS_BINDING, inputActions.SaveBindingOverridesAsJson());
             PlayerPrefs.Save();
+            inputActions.Dispose();
         }).Start();
 
     }
