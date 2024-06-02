@@ -23,11 +23,13 @@ public class DeliveryResultUI : MonoBehaviour
     }
     private void Start()
     {
+        gameObject.SetActive(false);
         deliveryCounter.OnDeliverSuccess += DeliveryManager_onRecipeCompleted;
         deliveryCounter.OnDeliverFailure += DeliverManager_onRecipeFailure;
     }
     private void DeliveryManager_onRecipeCompleted(object sender, EventArgs e)
     {
+        gameObject.SetActive(true);
         backgroundImage.color = successColor;
         iconImage.sprite = successSprite;
         messageText.text = "Delivery\nSuccess";
@@ -35,8 +37,10 @@ public class DeliveryResultUI : MonoBehaviour
     }
     private void DeliverManager_onRecipeFailure(object sender, EventArgs e)
     {
+        gameObject.SetActive(true);
         backgroundImage.color = failureColor;
         iconImage.sprite = failureSprite;
         messageText.text = "Delivery\nFailure";
+        animator.SetTrigger(POP_UP);
     }
 }
