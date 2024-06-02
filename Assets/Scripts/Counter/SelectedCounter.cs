@@ -13,7 +13,7 @@ public class SelectedCounter : MonoBehaviour
 
     void Start()
     {
-        Player.playerInstance.OnSelectedCounterChanged += PlayerInstance_OnSelectedCounterChanged;
+        //   Player.playerInstance.OnSelectedCounterChanged += PlayerInstance_OnSelectedCounterChanged;
 
     }
 

@@ -38,12 +38,12 @@ public class SoundManager : MonoBehaviour
 
     private void BaseCounter_OnDropedSomething(object sender, System.EventArgs e)
     {
-        PlayMusic(audioClipSO.objectDrop, Player.playerInstance.transform.position);
+        //  PlayMusic(audioClipSO.objectDrop, Player.playerInstance.transform.position);
     }
 
     private void BaseCounter_OnPickedUpSomething(object sender, System.EventArgs e)
     {
-        PlayMusic(audioClipSO.objectPickup, Player.playerInstance.transform.position);
+        // PlayMusic(audioClipSO.objectPickup, Player.playerInstance.transform.position);
     }
 
     private void CuttingCounter_OnAnyCut(object sender, System.EventArgs e)

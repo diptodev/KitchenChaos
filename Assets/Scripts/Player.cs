@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Player : BaseCounter, IKitchenObject
 {
-    [SerializeField] private GameInput gameInput;
+
     [SerializeField] private LayerMask counterLayerMask;
     private float moveSpeed = 5f;
     private float rotateSpeed = 15f;
@@ -14,7 +14,7 @@ public class Player : BaseCounter, IKitchenObject
     private Vector3 updatedMoveDir = Vector3.zero;
     private BaseCounter selectedCounter;
 
-    public static Player playerInstance { get; private set; }
+    //  public static Player playerInstance { get; private set; }
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
 
     public class OnSelectedCounterChangedEventArgs : EventArgs
@@ -23,12 +23,11 @@ public class Player : BaseCounter, IKitchenObject
     }
 
 
-
     private void Awake()
     {
-        gameInput.onInteractionEvent += GameInput_onInteractionEvent;
-        gameInput.onInteractionAlternateEvent += GameInput_onInteractionAlternateEvent;
-        playerInstance = this;
+        GameInput.instance.onInteractionEvent += GameInput_onInteractionEvent;
+        GameInput.instance.onInteractionAlternateEvent += GameInput_onInteractionAlternateEvent;
+        // playerInstance = this;
     }
 
     private void GameInput_onInteractionAlternateEvent(object sender, EventArgs e)
@@ -55,7 +54,7 @@ public class Player : BaseCounter, IKitchenObject
     }
     private void HandleInteraction()
     {
-        Vector2 inputVector = gameInput.GetNormalizedInput;
+        Vector2 inputVector = GameInput.instance.GetNormalizedInput;
         Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
         if (moveDir != Vector3.zero)
         {
@@ -80,7 +79,7 @@ public class Player : BaseCounter, IKitchenObject
     }
     private void HandleMovement()
     {
-        Vector2 inputVector = gameInput.GetNormalizedInput;
+        Vector2 inputVector = GameInput.instance.GetNormalizedInput;
         Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
         float playerRadius = 0.7f;
         float playerHeight = 2f;
