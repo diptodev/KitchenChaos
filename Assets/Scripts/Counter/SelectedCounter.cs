@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -13,8 +14,23 @@ public class SelectedCounter : MonoBehaviour
 
     void Start()
     {
-        //   Player.playerInstance.OnSelectedCounterChanged += PlayerInstance_OnSelectedCounterChanged;
+        if (Player.localPlayerInstance != null)
+        {
+            Player.localPlayerInstance.OnSelectedCounterChanged += PlayerInstance_OnSelectedCounterChanged;
+        }
+        else
+        {
+            Player.OnAnyPlayerSpawned += LocalPlayerInstanceEvent;
+        }
 
+    }
+    private void LocalPlayerInstanceEvent(object sender, EventArgs e)
+    {
+        if (Player.localPlayerInstance != null)
+        {
+            Player.localPlayerInstance.OnSelectedCounterChanged -= PlayerInstance_OnSelectedCounterChanged;
+            Player.localPlayerInstance.OnSelectedCounterChanged += PlayerInstance_OnSelectedCounterChanged;
+        }
     }
 
     private void PlayerInstance_OnSelectedCounterChanged(object sender, Player.OnSelectedCounterChangedEventArgs e)

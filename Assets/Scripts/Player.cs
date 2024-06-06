@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Player : NetworkBehaviour, IKitchenObject
 {
+    public static Player localPlayerInstance { get; private set; }
     private KitchenObject kitchenObject;
     [SerializeField] private Transform topPoint;
 
@@ -18,21 +19,31 @@ public class Player : NetworkBehaviour, IKitchenObject
     private bool canMove = false;
     private Vector3 updatedMoveDir = Vector3.zero;
     private BaseCounter selectedCounter;
+    public static event EventHandler OnAnyPlayerSpawned;
 
-    //  public static Player playerInstance { get; private set; }
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
 
     public class OnSelectedCounterChangedEventArgs : EventArgs
     {
         public BaseCounter selectedCounter;
     }
-
-
+    public static void ClearStaticData()
+    {
+        OnAnyPlayerSpawned = null;
+    }
+    public override void OnNetworkSpawn()
+    {
+        if (IsOwner)
+        {
+            localPlayerInstance = this;
+        }
+        OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
+    }
     private void Start()
     {
         GameInput.instance.onInteractionEvent += GameInput_onInteractionEvent;
         GameInput.instance.onInteractionAlternateEvent += GameInput_onInteractionAlternateEvent;
-        // playerInstance = this;
+
     }
 
     private void GameInput_onInteractionAlternateEvent(object sender, EventArgs e)

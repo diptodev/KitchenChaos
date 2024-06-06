@@ -12,6 +12,8 @@ public class ClearStaticField : MonoBehaviour
         CuttingCounter.ClearStaticData();
         BaseCounter.ClearStaticData();
         CompletePlateVisual.ClearStaticData();
+        Player.ClearStaticData();
         Time.timeScale = 1f;
+
     }
 }
