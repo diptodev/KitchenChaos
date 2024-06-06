@@ -40,9 +40,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8703762318469227275}
-  - component: {fileID: 146214229269034096}
+  - component: {fileID: 6375584337997073948}
   - component: {fileID: 3409133461406688519}
-  - component: {fileID: 8476367383801893639}
+  - component: {fileID: 1550383351063568220}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -67,7 +67,7 @@ Transform:
   - {fileID: 5251791682271917254}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &146214229269034096
+--- !u!114 &6375584337997073948
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -79,7 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 289251544
+  GlobalObjectIdHash: 3169401134
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -103,7 +103,7 @@ MonoBehaviour:
   counterLayerMask:
     serializedVersion: 2
     m_Bits: 64
---- !u!114 &8476367383801893639
+--- !u!114 &1550383351063568220
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -112,7 +112,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5500660744446990532}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Script: {fileID: 11500000, guid: f92c5ee93d1c4524f847d4885eae72e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SyncPositionX: 1

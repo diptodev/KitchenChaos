@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class BaseCounter : NetworkBehaviour, IKitchenObject
+public class BaseCounter : MonoBehaviour, IKitchenObject
 {
     private KitchenObject kitchenObject;
     [SerializeField] private Transform topPoint;

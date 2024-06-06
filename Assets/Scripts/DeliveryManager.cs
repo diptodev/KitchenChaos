@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-public class DeliveryManager : MonoBehaviour
+public class DeliveryManager : NetworkBehaviour
 {
     private int totalRecipeDelivered = 0;
     public event EventHandler onRecipeSpawned;
@@ -25,6 +26,10 @@ public class DeliveryManager : MonoBehaviour
     }
     private void Update()
     {
+        if (!IsServer)
+        {
+            return;
+        }
         if (currentWaitingRecipeNumber < maxWaitingRecipeNumber)
         {
             currentSpawnedTime += Time.deltaTime;
@@ -32,14 +37,26 @@ public class DeliveryManager : MonoBehaviour
             {
                 currentWaitingRecipeNumber++;
                 currentSpawnedTime = 0;
-                KitchenReciepeSO kitchenReciepeSO = mkitchenRecipeSO.kitchenReciepeSOList[UnityEngine.Random.Range(0, mkitchenRecipeSO.kitchenReciepeSOList.Count)];
-                waitingRecipeSOList.Add(kitchenReciepeSO);
-                onRecipeSpawned?.Invoke(this, EventArgs.Empty);
+                int waitingRecipeSOIndex = UnityEngine.Random.Range(0, mkitchenRecipeSO.kitchenReciepeSOList.Count);
+                SpwanNewWaitingRecipeSOServerRpc(waitingRecipeSOIndex);
             }
 
         }
 
     }
+    [ServerRpc]
+    private void SpwanNewWaitingRecipeSOServerRpc(int waitingRecipeSOIndex)
+    {
+        SpawnNewWaitingRecipeSOClientRpc(waitingRecipeSOIndex);
+    }
+    [ClientRpc]
+    private void SpawnNewWaitingRecipeSOClientRpc(int waitingRecipeSOIndex)
+    {
+        KitchenReciepeSO kitchenReciepeSO = mkitchenRecipeSO.kitchenReciepeSOList[waitingRecipeSOIndex];
+        waitingRecipeSOList.Add(kitchenReciepeSO);
+        onRecipeSpawned?.Invoke(this, EventArgs.Empty);
+    }
+
     public bool DeliverRecipe(PlateKitchenObject plateKitchenObject)
     {
         List<KitchenObjectSO> kitchenObjectList = plateKitchenObject.GetKitchenObjectList();
@@ -70,21 +87,41 @@ public class DeliveryManager : MonoBehaviour
                 if (completeIngredientFound)
                 {
 
-                    waitingRecipeSOList.RemoveAt(i);
-                    currentWaitingRecipeNumber -= 1;
-                    totalRecipeDelivered++;
-                    onRecipeCompleted?.Invoke(this, EventArgs.Empty);
+                    DeliverSuccessRecipeServerRpc(i);
                     return true;
                 }
                 else
                 {
-                    onRecipeFailure?.Invoke(this, EventArgs.Empty);
+                    DeliverFailureRecipeServerRpc();
                 }
 
             }
 
         }
         return false;
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void DeliverSuccessRecipeServerRpc(int deliveredRecipeIndex)
+    {
+        DeliverSuccessRecipeClientRpc(deliveredRecipeIndex);
+    }
+    [ClientRpc]
+    private void DeliverSuccessRecipeClientRpc(int deliveredRecipeIndex)
+    {
+        waitingRecipeSOList.RemoveAt(deliveredRecipeIndex);
+        currentWaitingRecipeNumber -= 1;
+        totalRecipeDelivered++;
+        onRecipeCompleted?.Invoke(this, EventArgs.Empty);
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void DeliverFailureRecipeServerRpc()
+    {
+        DeliverFailureRecipeClientRpc();
+    }
+    [ClientRpc]
+    private void DeliverFailureRecipeClientRpc()
+    {
+        onRecipeFailure?.Invoke(this, EventArgs.Empty);
     }
     public List<KitchenReciepeSO> GetKitchenRecipeSOList()
     {

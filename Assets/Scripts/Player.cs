@@ -4,9 +4,13 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class Player : BaseCounter, IKitchenObject
+public class Player : NetworkBehaviour, IKitchenObject
 {
+    private KitchenObject kitchenObject;
+    [SerializeField] private Transform topPoint;
 
+    public static event EventHandler OnPickedUpSomething;
+    public static event EventHandler OnDropedSomething;
     [SerializeField] private LayerMask counterLayerMask;
     private float moveSpeed = 5f;
     private float rotateSpeed = 15f;
@@ -24,7 +28,7 @@ public class Player : BaseCounter, IKitchenObject
     }
 
 
-    private void Awake()
+    private void Start()
     {
         GameInput.instance.onInteractionEvent += GameInput_onInteractionEvent;
         GameInput.instance.onInteractionAlternateEvent += GameInput_onInteractionAlternateEvent;
@@ -53,7 +57,6 @@ public class Player : BaseCounter, IKitchenObject
         {
             return;
         }
-
         HandleMovementAuth();
         HandleInteraction();
     }
@@ -85,10 +88,10 @@ public class Player : BaseCounter, IKitchenObject
     private void HandleMovementAuth()
     {
         Vector2 inputVector = GameInput.instance.GetNormalizedInput;
-        HandleMovementServerRpc(inputVector);
+        HandleMovementServeRpc(inputVector);
     }
-    [ServerRpc(RequireOwnership = false)]
-    private void HandleMovementServerRpc(Vector2 inputVector)
+    // [ServerRpc(RequireOwnership = false)]
+    private void HandleMovementServeRpc(Vector2 inputVector)
     {
 
         Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
@@ -135,4 +138,33 @@ public class Player : BaseCounter, IKitchenObject
         });
     }
     public bool IsWalking => isWalking;
+    public void SetKitchenObject(KitchenObject kitchenObject)
+    {
+        this.kitchenObject = kitchenObject;
+        if (this.kitchenObject.GetIKitchenObject() is Player)
+        {
+            OnPickedUpSomething?.Invoke(this, EventArgs.Empty);
+        }
+        else
+        {
+            OnDropedSomething?.Invoke(this, EventArgs.Empty);
+        }
+
+    }
+    public void ClearKitchenObject()
+    {
+        kitchenObject = null;
+    }
+    public KitchenObject GetKitchenObject()
+    {
+        return kitchenObject;
+    }
+    public bool HasKitchenObject()
+    {
+        return kitchenObject != null;
+    }
+    public Transform GetKitchenObjectFollowTransform()
+    {
+        return topPoint;
+    }
 }
