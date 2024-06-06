@@ -8,12 +8,12 @@ public class BaseCounter : MonoBehaviour, IKitchenObject
 {
     private KitchenObject kitchenObject;
     [SerializeField] private Transform topPoint;
-    public static event EventHandler OnPickedUpSomething;
+
     public static event EventHandler OnDropedSomething;
     public static void ClearStaticData()
     {
         OnDropedSomething = null;
-        OnDropedSomething = null;
+
     }
 
     public virtual void Interact(Player player)
@@ -28,15 +28,7 @@ public class BaseCounter : MonoBehaviour, IKitchenObject
     public void SetKitchenObject(KitchenObject kitchenObject)
     {
         this.kitchenObject = kitchenObject;
-        if (this.kitchenObject.GetIKitchenObject() is Player)
-        {
-            OnPickedUpSomething.Invoke(this, EventArgs.Empty);
-        }
-        else
-        {
-            OnDropedSomething.Invoke(this, EventArgs.Empty);
-        }
-
+        OnDropedSomething.Invoke(this, EventArgs.Empty);
     }
     public void ClearKitchenObject()
     {

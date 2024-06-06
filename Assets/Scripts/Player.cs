@@ -11,7 +11,7 @@ public class Player : NetworkBehaviour, IKitchenObject
     [SerializeField] private Transform topPoint;
 
     public static event EventHandler OnPickedUpSomething;
-    public static event EventHandler OnDropedSomething;
+
     [SerializeField] private LayerMask counterLayerMask;
     private float moveSpeed = 5f;
     private float rotateSpeed = 15f;
@@ -30,6 +30,8 @@ public class Player : NetworkBehaviour, IKitchenObject
     public static void ClearStaticData()
     {
         OnAnyPlayerSpawned = null;
+
+        OnPickedUpSomething = null;
     }
     public override void OnNetworkSpawn()
     {
@@ -151,16 +153,10 @@ public class Player : NetworkBehaviour, IKitchenObject
     public bool IsWalking => isWalking;
     public void SetKitchenObject(KitchenObject kitchenObject)
     {
-        this.kitchenObject = kitchenObject;
-        if (this.kitchenObject.GetIKitchenObject() is Player)
-        {
-            OnPickedUpSomething?.Invoke(this, EventArgs.Empty);
-        }
-        else
-        {
-            OnDropedSomething?.Invoke(this, EventArgs.Empty);
-        }
 
+        this.kitchenObject = kitchenObject;
+
+        OnPickedUpSomething?.Invoke(this, EventArgs.Empty);
     }
     public void ClearKitchenObject()
     {

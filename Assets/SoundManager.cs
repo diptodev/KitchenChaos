@@ -22,10 +22,11 @@ public class SoundManager : MonoBehaviour
         deliveryCounter1.OnDeliverSuccess += DeliveryCounter_OnDeliverSuccess;
         TrashCounter.OnItemTrashed += TrashCounter_OnItemTrashed;
         CuttingCounter.OnAnyCut += CuttingCounter_OnAnyCut;
-        BaseCounter.OnPickedUpSomething += BaseCounter_OnPickedUpSomething;
-        BaseCounter.OnDropedSomething += BaseCounter_OnDropedSomething;
+        Player.OnPickedUpSomething += Player_OnPickedUpSomething;
+        BaseCounter.OnDropedSomething += Player_OnDropedSomething;
         CompletePlateVisual.OnPickUpSomethingOnPlate += CompletePlateVisual_OnPickUpSomethingOnPlate;
-        volume = PlayerPrefs.GetFloat(SOUND_MANAGER_PLAYER_PREFS, 1f);
+        //volume = PlayerPrefs.GetFloat(SOUND_MANAGER_PLAYER_PREFS, 1f);
+        volume = 1;
     }
 
 
@@ -36,13 +37,13 @@ public class SoundManager : MonoBehaviour
         PlayMusic(audioClipSO.objectDrop, completePlateVisual.transform.position);
     }
 
-    private void BaseCounter_OnDropedSomething(object sender, System.EventArgs e)
+    private void Player_OnDropedSomething(object sender, System.EventArgs e)
     {
-        Player player = sender as Player;
-        PlayMusic(audioClipSO.objectDrop, player.transform.position);
+        BaseCounter baseCounter = sender as BaseCounter;
+        PlayMusic(audioClipSO.objectDrop, baseCounter.transform.position);
     }
 
-    private void BaseCounter_OnPickedUpSomething(object sender, System.EventArgs e)
+    private void Player_OnPickedUpSomething(object sender, System.EventArgs e)
     {
         Player player = sender as Player;
         PlayMusic(audioClipSO.objectPickup, player.transform.position);

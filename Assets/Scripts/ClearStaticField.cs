@@ -10,7 +10,7 @@ public class ClearStaticField : MonoBehaviour
         DeliveryCounter.ClearStaticData();
         TrashCounter.ClearStaticData();
         CuttingCounter.ClearStaticData();
-        BaseCounter.ClearStaticData();
+
         CompletePlateVisual.ClearStaticData();
         Player.ClearStaticData();
         Time.timeScale = 1f;
