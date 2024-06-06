@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class Player : BaseCounter, IKitchenObject
@@ -48,8 +49,12 @@ public class Player : BaseCounter, IKitchenObject
 
     void Update()
     {
+        if (!IsOwner)
+        {
+            return;
+        }
 
-        HandleMovement();
+        HandleMovementAuth();
         HandleInteraction();
     }
     private void HandleInteraction()
@@ -77,9 +82,15 @@ public class Player : BaseCounter, IKitchenObject
             SetBaseCounter(null);
         }
     }
-    private void HandleMovement()
+    private void HandleMovementAuth()
     {
         Vector2 inputVector = GameInput.instance.GetNormalizedInput;
+        HandleMovementServerRpc(inputVector);
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void HandleMovementServerRpc(Vector2 inputVector)
+    {
+
         Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
         float playerRadius = 0.7f;
         float playerHeight = 2f;
@@ -113,6 +124,7 @@ public class Player : BaseCounter, IKitchenObject
 
         }
         transform.forward = Vector3.Lerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+
     }
     private void SetBaseCounter(BaseCounter baseCounter)
     {
