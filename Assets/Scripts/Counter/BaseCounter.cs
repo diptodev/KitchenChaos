@@ -46,5 +46,8 @@ public class BaseCounter : MonoBehaviour, IKitchenObject
     {
         return topPoint;
     }
-
+    public NetworkObject GetNetworkObject()
+    {
+        return null;
+    }
 }

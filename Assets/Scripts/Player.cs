@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : NetworkBehaviour, IKitchenObject
@@ -173,5 +174,9 @@ public class Player : NetworkBehaviour, IKitchenObject
     public Transform GetKitchenObjectFollowTransform()
     {
         return topPoint;
+    }
+    public NetworkObject GetNetworkObject()
+    {
+        return NetworkObject;
     }
 }
