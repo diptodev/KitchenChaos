@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class DeliveryCounter : BaseCounter
@@ -22,13 +23,14 @@ public class DeliveryCounter : BaseCounter
                 if (DeliveryManager.instance.DeliverRecipe(plateKitchenObject))
                 {
                     player.GetKitchenObject().DestroyKitchenObject();
-                    OnDeliverSuccess.Invoke(this, EventArgs.Empty);
+
                     GameManager.Instance.setTimer();
+                    OnDeliverySuccessServerRpc();
                 }
                 else
                 {
 
-                    OnDeliverFailure.Invoke(this, EventArgs.Empty);
+                    OnDeliveryFailureServerRpc();
                 }
 
 
@@ -39,5 +41,26 @@ public class DeliveryCounter : BaseCounter
                 //If recipe is not completed it goes here
             }
         }
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void OnDeliverySuccessServerRpc()
+    {
+        OnDeliverySuccessClientRpc();
+    }
+    [ClientRpc]
+    private void OnDeliverySuccessClientRpc()
+    {
+        OnDeliverSuccess.Invoke(this, EventArgs.Empty);
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void OnDeliveryFailureServerRpc()
+    {
+        OnDeliveryFailureClientRpc();
+    }
+    [ClientRpc]
+    private void OnDeliveryFailureClientRpc()
+    {
+
+        OnDeliverFailure.Invoke(this, EventArgs.Empty);
     }
 }

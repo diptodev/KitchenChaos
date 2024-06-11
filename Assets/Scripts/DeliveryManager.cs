@@ -108,6 +108,7 @@ public class DeliveryManager : NetworkBehaviour
     [ClientRpc]
     private void DeliverSuccessRecipeClientRpc(int deliveredRecipeIndex)
     {
+        Debug.Log("Delivery Success");
         waitingRecipeSOList.RemoveAt(deliveredRecipeIndex);
         currentWaitingRecipeNumber -= 1;
         totalRecipeDelivered++;
@@ -121,6 +122,7 @@ public class DeliveryManager : NetworkBehaviour
     [ClientRpc]
     private void DeliverFailureRecipeClientRpc()
     {
+        Debug.Log("Delivery Fail");
         onRecipeFailure?.Invoke(this, EventArgs.Empty);
     }
     public List<KitchenReciepeSO> GetKitchenRecipeSOList()
