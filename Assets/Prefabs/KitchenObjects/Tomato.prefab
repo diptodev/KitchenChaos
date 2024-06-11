@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7506483430497686332}
   - component: {fileID: -8230447513424371978}
   - component: {fileID: 7622760925246099479}
+  - component: {fileID: 8040928961825221566}
   m_Layer: 0
   m_Name: Tomato
   m_TagString: Untagged
@@ -67,6 +68,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kitchenObjectSO: {fileID: 11400000, guid: f70e0f2699efe7446ade3a4a00bd99b5, type: 2}
+--- !u!114 &8040928961825221566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8580232235876303149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 310a28c805a72a443a607c669a26b39d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3621337059872081295
 PrefabInstance:
   m_ObjectHideFlags: 0
