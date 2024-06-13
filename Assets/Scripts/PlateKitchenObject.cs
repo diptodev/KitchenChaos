@@ -13,8 +13,9 @@ public class PlateKitchenObject : KitchenObject
     {
         public KitchenObjectSO kitchenObjectSO;
     }
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
         kitchenObjectsSOList = new List<KitchenObjectSO>();
     }
     public bool TryAddIngredient(KitchenObjectSO _kitchenObjectSO)

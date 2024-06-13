@@ -44,4 +44,10 @@ public class KitchenGameMultiplayer : NetworkBehaviour
     {
         return kitchenObjectListSO.kitchenObjectListSO.IndexOf(kitchenObjectSO);
     }
+    public void DestroyKitchenObjectInServer(NetworkObjectReference networkObjectReferenceKitchenObject)
+    {
+        networkObjectReferenceKitchenObject.TryGet(out NetworkObject networkObjectKitchenObject);
+        KitchenObject kitchenObject = networkObjectKitchenObject.GetComponent<KitchenObject>();
+        kitchenObject.DestroyKitchenObject();
+    }
 }

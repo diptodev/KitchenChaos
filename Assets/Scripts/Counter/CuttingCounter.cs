@@ -32,10 +32,12 @@ public class CuttingCounter : BaseCounter, IProgressBarUI
                 //Player has something and give it to the clearcounter
                 if (HasRecipeWithInput(player.GetKitchenObject().GetKitchenObjectSO()))
                 {
+
                     currentCuttingProgress = 0;
                     this.player = player;
-                    player.GetKitchenObject().SetIKitchenObjectParent(this);
-                    kitchenObjectSO = GetKitchenObject().GetKitchenObjectSO();
+                    KitchenObject kitchenObject = player.GetKitchenObject();
+                    kitchenObject.SetIKitchenObjectParent(this);
+                    kitchenObjectSO = kitchenObject.GetKitchenObjectSO();
                 }
                 else
                 {
@@ -67,7 +69,7 @@ public class CuttingCounter : BaseCounter, IProgressBarUI
 
                     if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
                     {
-                        GetKitchenObject().DestroyKitchenObject();
+                        GetKitchenObject().DestroyKitchenObjectFromServer();
 
                     }
                 }
@@ -93,7 +95,7 @@ public class CuttingCounter : BaseCounter, IProgressBarUI
             if (HasKitchenObject() && HasRecipeWithInput(kitchenObjectSO) && currentCuttingProgress >= maxCuttingProgress && !player.HasKitchenObject())
             {
                 KitchenObjectSO outputKitchenObject = GetKitchenObjectSO(kitchenObjectSO);
-                GetKitchenObject().DestroyKitchenObject();
+                GetKitchenObject().DestroyKitchenObjectFromServer();
                 KitchenObject.SpawnKitchenObject(outputKitchenObject, this);
 
             }

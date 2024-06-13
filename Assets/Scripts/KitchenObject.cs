@@ -8,7 +8,7 @@ public class KitchenObject : NetworkBehaviour
     [SerializeField] KitchenObjectSO kitchenObjectSO;
     private IKitchenObject iKitchenObjectParent;
     private FollowKitchenObject followKitchenObject;
-    private void Awake()
+    protected virtual void Awake()
     {
         followKitchenObject = GetComponent<FollowKitchenObject>();
     }
@@ -58,5 +58,19 @@ public class KitchenObject : NetworkBehaviour
         }
         plateKitchenObject = null;
         return false;
+    }
+    public void DestroyKitchenObjectFromServer()
+    {
+        DestroyKitchenObjectServerRpc();
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void DestroyKitchenObjectServerRpc()
+    {
+        DestroyKitchenObjectClientRpc();
+    }
+    [ClientRpc]
+    private void DestroyKitchenObjectClientRpc()
+    {
+        KitchenGameMultiplayer.Instance.DestroyKitchenObjectInServer(NetworkObject);
     }
 }

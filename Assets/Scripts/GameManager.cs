@@ -103,4 +103,8 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1f;
         }
     }
+    public bool IsGamePlaying()
+    {
+        return Time.timeScale == 1f;
+    }
 }
