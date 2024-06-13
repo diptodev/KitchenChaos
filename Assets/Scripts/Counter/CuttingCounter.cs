@@ -34,7 +34,7 @@ public class CuttingCounter : BaseCounter, IProgressBarUI
                 if (HasRecipeWithInput(player.GetKitchenObject().GetKitchenObjectSO()))
                 {
 
-                    currentCuttingProgress = 0;
+                    InteractLogicPlaceObjectOnCounterServerRpc();
                     this.player = player;
                     KitchenObject kitchenObject = player.GetKitchenObject();
                     kitchenObject.SetIKitchenObjectParent(this);
@@ -78,11 +78,22 @@ public class CuttingCounter : BaseCounter, IProgressBarUI
             }
         }
     }
+    [ServerRpc(RequireOwnership = false)]
+    private void InteractLogicPlaceObjectOnCounterServerRpc()
+    {
+        InteractLogicPlaceObjectOnCounterClientRpc();
+    }
+    [ClientRpc]
+    private void InteractLogicPlaceObjectOnCounterClientRpc()
+    {
+        currentCuttingProgress = 0;
+    }
     public override void AlternateInteract()
     {
-        if (kitchenObjectSO != null)
+        if (HasKitchenObject() && HasRecipeWithInput(GetKitchenObject().GetKitchenObjectSO()))
         {
             CuttingCounterAnimatorTriggerServerRpc();
+            TextCuttingProgessServerRpc();
         }
     }
     [ServerRpc(RequireOwnership = false)]
@@ -94,29 +105,30 @@ public class CuttingCounter : BaseCounter, IProgressBarUI
     private void CuttingCounterAnimatorTriggerClientRpc()
     {
         // KitchenObjectSO kitchenObjectSO = GetKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
-
         currentCuttingProgress++;
-        KitchenObjectSO kitchenObjectSO = GetKitchenObject().GetKitchenObjectSO();
-        CuttingRecipeSO cuttingRecipeSO = GetSelectedCuttingRecipe(kitchenObjectSO);
 
-        if (cuttingRecipeSO == null) return;
+        CuttingRecipeSO cuttingRecipeSO = GetSelectedCuttingRecipe(GetKitchenObject().GetKitchenObjectSO());
 
-        maxCuttingProgress = cuttingRecipeSO.maxCuttingProgress;
         OnCuttingRecipeInteract.Invoke(this, EventArgs.Empty);
+        OnAnyCut.Invoke(this, EventArgs.Empty);
         OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
         {
-            normalizedProgressBarValue = (float)currentCuttingProgress / maxCuttingProgress,
+            normalizedProgressBarValue = (float)currentCuttingProgress / cuttingRecipeSO.maxCuttingProgress,
             modeColor = "burning"
         });
-        if (HasKitchenObject() && HasRecipeWithInput(kitchenObjectSO) && currentCuttingProgress >= maxCuttingProgress && !player.HasKitchenObject())
+
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void TextCuttingProgessServerRpc()
+    {
+        CuttingRecipeSO cuttingRecipeSO = GetSelectedCuttingRecipe(GetKitchenObject().GetKitchenObjectSO());
+        if (currentCuttingProgress >= cuttingRecipeSO.maxCuttingProgress)
         {
-            KitchenObjectSO outputKitchenObject = GetKitchenObjectSO(kitchenObjectSO);
+            KitchenObjectSO outputKitchenObject = GetKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
+
             KitchenObject.DestroyKitchenObjectFromServer(GetKitchenObject());
+
             KitchenObject.SpawnKitchenObject(outputKitchenObject, this);
-        }
-        if (currentCuttingProgress <= maxCuttingProgress)
-        {
-            OnAnyCut.Invoke(this, EventArgs.Empty);
         }
     }
     private bool HasRecipeWithInput(KitchenObjectSO kitchenObjectSO)
