@@ -41,8 +41,12 @@ public class KitchenObject : NetworkBehaviour
     }
     public void DestroyKitchenObject()
     {
-        iKitchenObjectParent.ClearKitchenObject();
+
         Destroy(gameObject);
+    }
+    public void ClearIkitchenParent()
+    {
+        iKitchenObjectParent.ClearKitchenObject();
     }
     public static void SpawnKitchenObject(KitchenObjectSO kitchenObjectSO, IKitchenObject iKitchenObject)
     {
@@ -59,18 +63,11 @@ public class KitchenObject : NetworkBehaviour
         plateKitchenObject = null;
         return false;
     }
-    public void DestroyKitchenObjectFromServer()
+
+    public static void DestroyKitchenObjectFromServer(KitchenObject kitchenObject)
     {
-        DestroyKitchenObjectServerRpc();
+        KitchenGameMultiplayer.Instance.DestroyKitchenObjectInServer(kitchenObject);
     }
-    [ServerRpc(RequireOwnership = false)]
-    private void DestroyKitchenObjectServerRpc()
-    {
-        DestroyKitchenObjectClientRpc();
-    }
-    [ClientRpc]
-    private void DestroyKitchenObjectClientRpc()
-    {
-        KitchenGameMultiplayer.Instance.DestroyKitchenObjectInServer(NetworkObject);
-    }
+
+
 }

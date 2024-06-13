@@ -35,19 +35,32 @@ public class KitchenGameMultiplayer : NetworkBehaviour
         kitchenObject.SetIKitchenObjectParent(kitchenObjectParent);
     }
 
-    private KitchenObjectSO GetKitchenObjectSOFromIndex(int indexOfKitchenObjectSO)
+    public KitchenObjectSO GetKitchenObjectSOFromIndex(int indexOfKitchenObjectSO)
     {
         return kitchenObjectListSO.kitchenObjectListSO[indexOfKitchenObjectSO];
     }
 
-    private int GetKicthenOBjectIndexFromKitchenObjectSO(KitchenObjectSO kitchenObjectSO)
+    public int GetKicthenOBjectIndexFromKitchenObjectSO(KitchenObjectSO kitchenObjectSO)
     {
         return kitchenObjectListSO.kitchenObjectListSO.IndexOf(kitchenObjectSO);
     }
-    public void DestroyKitchenObjectInServer(NetworkObjectReference networkObjectReferenceKitchenObject)
+    public void DestroyKitchenObjectInServer(KitchenObject kitchenObject)
+    {
+        DestroyKitchenObjectFromServerRpc(kitchenObject.NetworkObject);
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void DestroyKitchenObjectFromServerRpc(NetworkObjectReference networkObjectReferenceKitchenObject)
     {
         networkObjectReferenceKitchenObject.TryGet(out NetworkObject networkObjectKitchenObject);
         KitchenObject kitchenObject = networkObjectKitchenObject.GetComponent<KitchenObject>();
+        ClearKitchenObjectParentClientRpc(networkObjectReferenceKitchenObject);
         kitchenObject.DestroyKitchenObject();
+    }
+    [ClientRpc]
+    private void ClearKitchenObjectParentClientRpc(NetworkObjectReference networkObjectReferenceKitchenObject)
+    {
+        networkObjectReferenceKitchenObject.TryGet(out NetworkObject networkObjectKitchenObject);
+        KitchenObject kitchenObject = networkObjectKitchenObject.GetComponent<KitchenObject>();
+        kitchenObject.ClearIkitchenParent();
     }
 }

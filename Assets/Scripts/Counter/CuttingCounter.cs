@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class CuttingCounter : BaseCounter, IProgressBarUI
@@ -69,7 +70,7 @@ public class CuttingCounter : BaseCounter, IProgressBarUI
 
                     if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
                     {
-                        GetKitchenObject().DestroyKitchenObjectFromServer();
+                        KitchenObject.DestroyKitchenObjectFromServer(GetKitchenObject());
 
                     }
                 }
@@ -81,29 +82,41 @@ public class CuttingCounter : BaseCounter, IProgressBarUI
     {
         if (kitchenObjectSO != null)
         {
-            currentCuttingProgress++;
-            maxCuttingProgress = GetSelectedCuttingRecipe(kitchenObjectSO).maxCuttingProgress;
-            if (kitchenObjectSO == GetKitchenObject()?.GetKitchenObjectSO())
-            {
-                OnCuttingRecipeInteract.Invoke(this, EventArgs.Empty);
-            }
-            OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
-            {
-                normalizedProgressBarValue = (float)currentCuttingProgress / maxCuttingProgress,
-                modeColor = "burning"
-            });
-            if (HasKitchenObject() && HasRecipeWithInput(kitchenObjectSO) && currentCuttingProgress >= maxCuttingProgress && !player.HasKitchenObject())
-            {
-                KitchenObjectSO outputKitchenObject = GetKitchenObjectSO(kitchenObjectSO);
-                GetKitchenObject().DestroyKitchenObjectFromServer();
-                KitchenObject.SpawnKitchenObject(outputKitchenObject, this);
+            CuttingCounterAnimatorTriggerServerRpc();
+        }
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void CuttingCounterAnimatorTriggerServerRpc()
+    {
+        CuttingCounterAnimatorTriggerClientRpc();
+    }
+    [ClientRpc]
+    private void CuttingCounterAnimatorTriggerClientRpc()
+    {
+        // KitchenObjectSO kitchenObjectSO = GetKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
 
-            }
-            if (currentCuttingProgress <= maxCuttingProgress)
-            {
-                OnAnyCut.Invoke(this, EventArgs.Empty);
-            }
+        currentCuttingProgress++;
+        KitchenObjectSO kitchenObjectSO = GetKitchenObject().GetKitchenObjectSO();
+        CuttingRecipeSO cuttingRecipeSO = GetSelectedCuttingRecipe(kitchenObjectSO);
 
+        if (cuttingRecipeSO == null) return;
+
+        maxCuttingProgress = cuttingRecipeSO.maxCuttingProgress;
+        OnCuttingRecipeInteract.Invoke(this, EventArgs.Empty);
+        OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
+        {
+            normalizedProgressBarValue = (float)currentCuttingProgress / maxCuttingProgress,
+            modeColor = "burning"
+        });
+        if (HasKitchenObject() && HasRecipeWithInput(kitchenObjectSO) && currentCuttingProgress >= maxCuttingProgress && !player.HasKitchenObject())
+        {
+            KitchenObjectSO outputKitchenObject = GetKitchenObjectSO(kitchenObjectSO);
+            KitchenObject.DestroyKitchenObjectFromServer(GetKitchenObject());
+            KitchenObject.SpawnKitchenObject(outputKitchenObject, this);
+        }
+        if (currentCuttingProgress <= maxCuttingProgress)
+        {
+            OnAnyCut.Invoke(this, EventArgs.Empty);
         }
     }
     private bool HasRecipeWithInput(KitchenObjectSO kitchenObjectSO)

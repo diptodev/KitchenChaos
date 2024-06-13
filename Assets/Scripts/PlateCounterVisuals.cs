@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class PlateCounterVisuals : MonoBehaviour
@@ -30,7 +31,16 @@ public class PlateCounterVisuals : MonoBehaviour
         platePrefabsVisual.localPosition = new Vector3(0, plateOffsetY * platePrefabsList.Count, 0);
         platePrefabsList.Add(platePrefabsVisual.gameObject);
     }
+    // [ServerRpc(RequireOwnership = false)]
+    // private void PlateCounterSpawnedServerRpc()
+    // {
+    //     PlateCounterSpawnedClientRpc();
+    // }
+    // [ClientRpc]
+    // private void PlateCounterSpawnedClientRpc()
+    // {
 
+    // }
     // Update is called once per frame
     void Update()
     {

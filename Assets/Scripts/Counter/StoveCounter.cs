@@ -77,7 +77,8 @@ public class StoveCounter : BaseCounter, IProgressBarUI
 
                     break;
                 case State.Fried:
-                    GetKitchenObject().DestroyKitchenObjectFromServer();
+
+                    KitchenObject.DestroyKitchenObjectFromServer(GetKitchenObject());
                     KitchenObject.SpawnKitchenObject(frying.cooked, this);
                     state = State.Resting;
                     OnStoveStateChanged?.Invoke(this, new StoveState
@@ -115,7 +116,7 @@ public class StoveCounter : BaseCounter, IProgressBarUI
                             stoveState = State.Burned
                         });
                         state = State.Burned;
-                        GetKitchenObject().DestroyKitchenObjectFromServer();
+                        KitchenObject.DestroyKitchenObjectFromServer(GetKitchenObject());
                     }
                     else
                     {
@@ -205,7 +206,7 @@ public class StoveCounter : BaseCounter, IProgressBarUI
                     {
                         if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
                         {
-                            GetKitchenObject().DestroyKitchenObjectFromServer();
+                            KitchenObject.DestroyKitchenObjectFromServer(GetKitchenObject());
                             OnStoveStateChanged?.Invoke(this, new StoveState
                             {
                                 stoveState = State.Idle

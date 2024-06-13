@@ -22,7 +22,7 @@ public class DeliveryCounter : BaseCounter
             {
                 if (DeliveryManager.instance.DeliverRecipe(plateKitchenObject))
                 {
-                    player.GetKitchenObject().DestroyKitchenObjectFromServer();
+                    KitchenObject.DestroyKitchenObjectFromServer(player.GetKitchenObject());
 
                     GameManager.Instance.setTimer();
                     OnDeliverySuccessServerRpc();
