@@ -1,4 +1,5 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 public class StoveCounter : BaseCounter, IProgressBarUI
@@ -11,9 +12,11 @@ public class StoveCounter : BaseCounter, IProgressBarUI
         public State stoveState;
     }
     private KitchenObjectSO kitchenObjectSO;
-    private float cookingTime;
-    private float restingTime;
-    private float burningTime;
+    FryingRecipeSO fryingRecipeSO;
+    private NetworkVariable<float> cookingTime = new NetworkVariable<float>(0f);
+
+    private NetworkVariable<float> restingTime = new NetworkVariable<float>(0f);
+    private NetworkVariable<float> burningTime = new NetworkVariable<float>(0f);
 
     public enum State
     {
@@ -25,123 +28,117 @@ public class StoveCounter : BaseCounter, IProgressBarUI
         Burned,
         Default
     }
-    private State state;
-
+    private NetworkVariable<State> state = new NetworkVariable<State>(State.Idle);
+    public override void OnNetworkSpawn()
+    {
+        cookingTime.OnValueChanged += CookingTimerOnValueChanged;
+        restingTime.OnValueChanged += RestingTimerOnValueChanged;
+        burningTime.OnValueChanged += BurningTimerOnValueChanged;
+        state.OnValueChanged += StateOnValueChanged;
+    }
     public event EventHandler<IProgressBarUI.OnIProgressBarUIEventArgs> OnIProgressBarUI;
     public class OnIProgressBarUIEventArgs : EventArgs
     {
         public float normalizedProgressBarValue;
         public string modeColor;
     }
-    private void Start()
+    private void StateOnValueChanged(State preState, State newState)
     {
-        state = State.Idle;
+        OnStoveStateChanged?.Invoke(this, new StoveState
+        {
+            stoveState = newState
+        });
+    }
+    private void CookingTimerOnValueChanged(float prevValue, float newValue)
+    {
+        float fryingTimerMax = fryingRecipeSO != null ? fryingRecipeSO.maxCookedTime : 1f;
+        OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
+        {
+            normalizedProgressBarValue = cookingTime.Value / fryingTimerMax,
+            modeColor = "burning"
+        });
+    }
+    private void RestingTimerOnValueChanged(float prevValue, float newValue)
+    {
+        float restingTimerMax = fryingRecipeSO != null ? fryingRecipeSO.maxRestingTime : 1f;
+        OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
+        {
+            normalizedProgressBarValue = restingTime.Value / restingTimerMax,
+            modeColor = "resting"
+        });
+    }
+    private void BurningTimerOnValueChanged(float prevValue, float newValue)
+    {
+        float burningTimerMax = fryingRecipeSO != null ? fryingRecipeSO.maxBurningTime : 1f;
+        OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
+        {
+            normalizedProgressBarValue = burningTime.Value / burningTimerMax,
+            modeColor = "black"
+        });
     }
     private void Update()
     {
-
+        if (!IsServer) return;
         if (kitchenObjectSO != null)
         {
-
-            FryingRecipeSO frying = GetSelectedFryingRecipe(kitchenObjectSO);
-
-
-            switch (state)
+            switch (state.Value)
             {
                 case State.Idle:
-                    state = State.Frying;
-                    OnStoveStateChanged?.Invoke(this, new StoveState
-                    {
-                        stoveState = State.Frying
-                    });
+                    state.Value = State.Frying;
                     break;
                 case State.Frying:
 
-                    if (cookingTime >= frying.maxCookedTime)
+                    if (cookingTime.Value >= fryingRecipeSO.maxCookedTime)
                     {
-                        state = State.Fried;
-                        OnStoveStateChanged?.Invoke(this, new StoveState
-                        {
-                            stoveState = State.Fried
-                        });
+                        state.Value = State.Fried;
+
                     }
-                    else
-                    {
-                        cookingTime += Time.deltaTime;
-                        OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
-                        {
-                            normalizedProgressBarValue = cookingTime / frying.maxCookedTime,
-                            modeColor = "burning"
-                        });
-                    }
+                    else { cookingTime.Value += Time.deltaTime; }
 
                     break;
                 case State.Fried:
 
                     KitchenObject.DestroyKitchenObjectFromServer(GetKitchenObject());
-                    KitchenObject.SpawnKitchenObject(frying.cooked, this);
-                    state = State.Resting;
-                    OnStoveStateChanged?.Invoke(this, new StoveState
-                    {
-                        stoveState = State.Resting
-                    });
+                    KitchenObject.SpawnKitchenObject(fryingRecipeSO.cooked, this);
+                    state.Value = State.Resting;
+
                     break;
                 case State.Resting:
 
 
-                    if (restingTime >= frying.maxRestingTime)
+                    if (restingTime.Value >= fryingRecipeSO.maxRestingTime)
                     {
-                        state = State.Burning;
-                        OnStoveStateChanged?.Invoke(this, new StoveState
-                        {
-                            stoveState = State.Burning
-                        });
+                        state.Value = State.Burning;
+
                     }
                     else
                     {
-                        restingTime += Time.deltaTime;
-                        OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
-                        {
-                            normalizedProgressBarValue = restingTime / frying.maxRestingTime,
-                            modeColor = "resting"
-                        });
+                        restingTime.Value += Time.deltaTime;
+
                     }
                     break;
                 case State.Burning:
 
-                    if (burningTime >= frying.maxBurningTime)
+                    if (burningTime.Value >= fryingRecipeSO.maxBurningTime)
                     {
-                        OnStoveStateChanged?.Invoke(this, new StoveState
-                        {
-                            stoveState = State.Burned
-                        });
-                        state = State.Burned;
+
+                        state.Value = State.Burned;
                         KitchenObject.DestroyKitchenObjectFromServer(GetKitchenObject());
                     }
                     else
                     {
-                        burningTime += Time.deltaTime;
-                        OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
-                        {
-                            normalizedProgressBarValue = burningTime / frying.maxBurningTime,
-                            modeColor = "black"
-                        });
+                        burningTime.Value += Time.deltaTime;
+
                     }
                     break;
                 case State.Burned:
-                    OnStoveStateChanged?.Invoke(this, new StoveState
-                    {
-                        stoveState = State.Default
-                    });
-                    KitchenObject.SpawnKitchenObject(frying.burned, this);
-                    state = State.Default;
-                    OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
-                    {
-                        normalizedProgressBarValue = 0
-                    });
+
+                    KitchenObject.SpawnKitchenObject(fryingRecipeSO.burned, this);
+                    ResetStoveClientRpc();
+                    state.Value = State.Default;
                     break;
                 case State.Default:
-                    fireEffect.SetActive(false);
+                    ;
                     // Debug.Log("Please put it on the trash");
 
                     break;
@@ -160,13 +157,10 @@ public class StoveCounter : BaseCounter, IProgressBarUI
                 //Player has something and give it to the clearcounter
                 if (HasRecipeWithInput(player.GetKitchenObject().GetKitchenObjectSO()))
                 {
-                    player.GetKitchenObject().SetIKitchenObjectParent(this);
-                    kitchenObjectSO = GetKitchenObject().GetKitchenObjectSO();
-                    cookingTime = 0;
-                    restingTime = 0;
-                    burningTime = 0;
-                    state = State.Idle;
-                    fireEffect.SetActive(true);
+                    KitchenObject kitchenObject = player.GetKitchenObject();
+                    kitchenObject.SetIKitchenObjectParent(this);
+                    int kitchenObjectSOIndex = KitchenGameMultiplayer.Instance.GetKicthenOBjectIndexFromKitchenObjectSO(kitchenObject.GetKitchenObjectSO());
+                    InteractLogicServerRpc(kitchenObjectSOIndex);
                 }
                 else
                 {
@@ -186,31 +180,23 @@ public class StoveCounter : BaseCounter, IProgressBarUI
             if (!player.HasKitchenObject())
             {
                 //ClearCounter has something and give it to the player
-                if (state == State.Burned || state == State.Default)
+                if (state.Value == State.Burned || state.Value == State.Default)
                 {
                     GetKitchenObject().SetIKitchenObjectParent(player);
-                    ResetStove();
-                    OnStoveStateChanged?.Invoke(this, new StoveState
-                    {
-                        stoveState = State.Idle
-                    });
+                    ResetStoveServerRpc();
                 }
             }
             else
             {
                 //ClearCounter has something but player has also something
-                if (state == State.Fried || state == State.Resting || state == State.Burning || state == State.Default || state == State.Burned)
+                if (state.Value == State.Fried || state.Value == State.Resting || state.Value == State.Burning || state.Value == State.Default || state.Value == State.Burned)
                 {
-                    ResetStove();
                     if (player.GetKitchenObject().TryKitchenPlate(out PlateKitchenObject plateKitchenObject))
                     {
                         if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
                         {
                             KitchenObject.DestroyKitchenObjectFromServer(GetKitchenObject());
-                            OnStoveStateChanged?.Invoke(this, new StoveState
-                            {
-                                stoveState = State.Idle
-                            });
+                            ResetStoveServerRpc();
                         }
                     }
                 }
@@ -218,19 +204,56 @@ public class StoveCounter : BaseCounter, IProgressBarUI
 
         }
     }
-    private void ResetStove()
+
+    [ServerRpc(RequireOwnership = false)]
+    private void InteractLogicServerRpc(int kitchenObjectSOIndex)
+    {
+        cookingTime.Value = 0;
+        restingTime.Value = 0;
+        burningTime.Value = 0;
+        state.Value = State.Idle;
+        InteractLogicClientRpc(kitchenObjectSOIndex);
+    }
+    [ClientRpc]
+    private void InteractLogicClientRpc(int kitchenObjectSOIndex)
+    {
+        kitchenObjectSO = KitchenGameMultiplayer.Instance.GetKitchenObjectSOFromIndex(kitchenObjectSOIndex);
+        fryingRecipeSO = GetSelectedFryingRecipe(kitchenObjectSO);
+        fireEffect.SetActive(true);
+        OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
+        {
+            normalizedProgressBarValue = 0,
+            modeColor = "burning"
+        });
+
+        OnStoveStateChanged?.Invoke(this, new StoveState
+        {
+            stoveState = State.Idle
+        });
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void ResetStoveServerRpc()
     {
 
         kitchenObjectSO = null;
-        cookingTime = 0;
-        restingTime = 0;
-        burningTime = 0;
-        state = State.Idle;
+        cookingTime.Value = 0;
+        restingTime.Value = 0;
+        burningTime.Value = 0;
+        state.Value = State.Idle;
+        ResetStoveClientRpc();
+    }
+    [ClientRpc]
+    private void ResetStoveClientRpc()
+    {
         fireEffect.SetActive(false);
         OnIProgressBarUI.Invoke(this, new IProgressBarUI.OnIProgressBarUIEventArgs
         {
             normalizedProgressBarValue = 0,
             modeColor = "burning"
+        });
+        OnStoveStateChanged?.Invoke(this, new StoveState
+        {
+            stoveState = State.Idle
         });
     }
     public override void AlternateInteract()
