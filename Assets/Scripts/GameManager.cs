@@ -26,7 +26,7 @@ public class GameManager : NetworkBehaviour
     private float waitingToStart = 1f;
     private float countDownToStart = 3f;
     private NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(0f);
-    private NetworkVariable<float> gamePlayingTimerMax = new NetworkVariable<float>(3f);
+    private NetworkVariable<float> gamePlayingTimerMax = new NetworkVariable<float>(30f);
     public override void OnNetworkSpawn()
     {
         state.OnValueChanged += GameStateValueChanged;
