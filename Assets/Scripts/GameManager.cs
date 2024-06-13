@@ -2,11 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : NetworkBehaviour
 {
-    public event EventHandler OnStateChanged;
+    public event EventHandler<OnStateChangedValue> OnStateChanged;
+    public class OnStateChangedValue : EventArgs
+    {
+        public GameState gameState;
+    }
     private bool isGamePause = false;
     public static GameManager Instance { get; private set; }
     public enum GameState
@@ -14,13 +19,25 @@ public class GameManager : NetworkBehaviour
         WaitingToStart,
         CountDownToStart,
         GameStart,
-        GameOver
+        GameOver,
+        Default
     }
     private NetworkVariable<GameState> state = new NetworkVariable<GameState>(GameState.WaitingToStart);
     private float waitingToStart = 1f;
     private float countDownToStart = 3f;
     private NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(0f);
-    private NetworkVariable<float> gamePlayingTimerMax = new NetworkVariable<float>(300f);
+    private NetworkVariable<float> gamePlayingTimerMax = new NetworkVariable<float>(3f);
+    public override void OnNetworkSpawn()
+    {
+        state.OnValueChanged += GameStateValueChanged;
+    }
+    private void GameStateValueChanged(GameState prevState, GameState newState)
+    {
+        OnStateChanged?.Invoke(this, new OnStateChangedValue
+        {
+            gameState = newState
+        });
+    }
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -37,7 +54,7 @@ public class GameManager : NetworkBehaviour
                 {
 
                     state.Value = GameState.CountDownToStart;
-                    OnStateChanged?.Invoke(this, EventArgs.Empty);
+
                 }
                 else
                 {
@@ -49,7 +66,7 @@ public class GameManager : NetworkBehaviour
                 {
                     gamePlayingTimer.Value = gamePlayingTimerMax.Value;
                     state.Value = GameState.GameStart;
-                    OnStateChanged?.Invoke(this, EventArgs.Empty);
+
                 }
                 else
                 {
@@ -59,9 +76,7 @@ public class GameManager : NetworkBehaviour
             case GameState.GameStart:
                 if (gamePlayingTimer.Value < 0f)
                 {
-
                     state.Value = GameState.GameOver;
-                    OnStateChanged?.Invoke(this, EventArgs.Empty);
                 }
                 else
                 {
@@ -73,6 +88,20 @@ public class GameManager : NetworkBehaviour
                 break;
         }
     }
+    // [ServerRpc(RequireOwnership = false)]
+    // private void GameStateChangedServerRpc()
+    // {
+    //     GameStateChangedClientRpc();
+    // }
+    // [ClientRpc]
+    // private void GameStateChangedClientRpc()
+    // {
+    //     OnStateChanged?.Invoke(this, new OnStateChangedValue
+    //     {
+    //         gameState = state.Value
+    //     });
+
+    // }
     public void setTimer()
     {
         gamePlayingTimer.Value = gamePlayingTimerMax.Value;

@@ -11566,6 +11566,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2001808893}
+  - component: {fileID: 2001808895}
   - component: {fileID: 2001808894}
   m_Layer: 5
   m_Name: GameOverUI
@@ -11610,6 +11611,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMeshProRecipeDelivered: {fileID: 760836389}
+--- !u!114 &2001808895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2001808892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 2266030538
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!4 &2027425972 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1313250741288048403, guid: 5e3240d1ce959ae4084dd1b6367270bc,

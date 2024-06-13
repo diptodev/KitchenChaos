@@ -1,21 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 
-public class GameOverUI : MonoBehaviour
+public class GameOverUI : NetworkBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] private TextMeshProUGUI textMeshProRecipeDelivered;
     void Start()
     {
         GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
+
         transform.gameObject.SetActive(false);
     }
 
-    private void GameManager_OnStateChanged(object sender, System.EventArgs e)
+    private void GameManager_OnStateChanged(object sender, GameManager.OnStateChangedValue e)
     {
-        if (GameManager.Instance.IsGameOver())
+        Debug.Log(e.gameState);
+        if (e.gameState == GameManager.GameState.GameOver)
         {
             Show();
             textMeshProRecipeDelivered.text = DeliveryManager.instance.GetTotalDeliverdRecipe().ToString();
