@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
     public event EventHandler OnStateChanged;
     private bool isGamePause = false;
@@ -15,11 +16,11 @@ public class GameManager : MonoBehaviour
         GameStart,
         GameOver
     }
-    private GameState state = GameState.WaitingToStart;
+    private NetworkVariable<GameState> state = new NetworkVariable<GameState>(GameState.WaitingToStart);
     private float waitingToStart = 1f;
     private float countDownToStart = 3f;
-    private float gamePlayingTimer;
-    private float gamePlayingTimerMax = 300f;
+    private NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(0f);
+    private NetworkVariable<float> gamePlayingTimerMax = new NetworkVariable<float>(300f);
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -27,13 +28,15 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        switch (state)
+        if (!IsServer) return;
+
+        switch (state.Value)
         {
             case GameState.WaitingToStart:
                 if (waitingToStart < 0f)
                 {
 
-                    state = GameState.CountDownToStart;
+                    state.Value = GameState.CountDownToStart;
                     OnStateChanged?.Invoke(this, EventArgs.Empty);
                 }
                 else
@@ -44,8 +47,8 @@ public class GameManager : MonoBehaviour
             case GameState.CountDownToStart:
                 if (countDownToStart < 0f)
                 {
-                    gamePlayingTimer = gamePlayingTimerMax;
-                    state = GameState.GameStart;
+                    gamePlayingTimer.Value = gamePlayingTimerMax.Value;
+                    state.Value = GameState.GameStart;
                     OnStateChanged?.Invoke(this, EventArgs.Empty);
                 }
                 else
@@ -54,15 +57,15 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case GameState.GameStart:
-                if (gamePlayingTimer < 0f)
+                if (gamePlayingTimer.Value < 0f)
                 {
 
-                    state = GameState.GameOver;
+                    state.Value = GameState.GameOver;
                     OnStateChanged?.Invoke(this, EventArgs.Empty);
                 }
                 else
                 {
-                    gamePlayingTimer -= Time.deltaTime;
+                    gamePlayingTimer.Value -= Time.deltaTime;
                 }
                 break;
             case GameState.GameOver:
@@ -72,24 +75,24 @@ public class GameManager : MonoBehaviour
     }
     public void setTimer()
     {
-        gamePlayingTimer = gamePlayingTimerMax;
+        gamePlayingTimer.Value = gamePlayingTimerMax.Value;
     }
     public GameState GetCurrentGameState()
     {
-        return state;
+        return state.Value;
     }
     public bool IsCountDownActive()
     {
-        return state == GameState.CountDownToStart;
+        return state.Value == GameState.CountDownToStart;
     }
     public float GetCountDownTimer() => countDownToStart;
     public bool IsGameOver()
     {
-        return state == GameState.GameOver;
+        return state.Value == GameState.GameOver;
     }
     public float GetRecipeTimeout()
     {
-        return 1 - (gamePlayingTimer / gamePlayingTimerMax);
+        return 1 - (gamePlayingTimer.Value / gamePlayingTimerMax.Value);
     }
     public void TooglePauseGame()
     {
