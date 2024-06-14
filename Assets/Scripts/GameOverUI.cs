@@ -15,10 +15,10 @@ public class GameOverUI : NetworkBehaviour
         transform.gameObject.SetActive(false);
     }
 
-    private void GameManager_OnStateChanged(object sender, GameManager.OnStateChangedValue e)
+    private void GameManager_OnStateChanged(object sender, System.EventArgs e)
     {
-        Debug.Log(e.gameState);
-        if (e.gameState == GameManager.GameState.GameOver)
+
+        if (GameManager.Instance.IsGameOver())
         {
             Show();
             textMeshProRecipeDelivered.text = DeliveryManager.instance.GetTotalDeliverdRecipe().ToString();

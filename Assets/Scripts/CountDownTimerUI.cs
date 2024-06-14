@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -13,16 +14,16 @@ public class CountDownTimerUI : MonoBehaviour
         transform.gameObject.SetActive(false);
     }
 
-    private void GameManager_OnStateChanged(object sender, System.EventArgs e)
+    private void GameManager_OnStateChanged(object sender, EventArgs e)
     {
-        if (GameManager.Instance.IsCountDownActive())
-        {
-            Show();
-        }
-        else
-        {
-            Hide();
-        }
+        // if ( )
+        // {
+        //     Show();
+        // }
+        // else
+        // {
+        //     Hide();
+        // }
     }
 
     void Update()

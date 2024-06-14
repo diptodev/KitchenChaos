@@ -5,9 +5,9 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class GameManager : NetworkBehaviour
+public class GameManager : MonoBehaviour
 {
-    public event EventHandler<OnStateChangedValue> OnStateChanged;
+    public event EventHandler OnStateChanged;
     public class OnStateChangedValue : EventArgs
     {
         public GameState gameState;
@@ -22,22 +22,23 @@ public class GameManager : NetworkBehaviour
         GameOver,
         Default
     }
-    private NetworkVariable<GameState> state = new NetworkVariable<GameState>(GameState.WaitingToStart);
+    //private NetworkVariable<GameState> state = new NetworkVariable<GameState>(GameState.WaitingToStart);
+    private GameState state = GameState.WaitingToStart;
     private float waitingToStart = 1f;
     private float countDownToStart = 3f;
-    private NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(0f);
-    private NetworkVariable<float> gamePlayingTimerMax = new NetworkVariable<float>(30f);
-    public override void OnNetworkSpawn()
-    {
-        state.OnValueChanged += GameStateValueChanged;
-    }
-    private void GameStateValueChanged(GameState prevState, GameState newState)
-    {
-        OnStateChanged?.Invoke(this, new OnStateChangedValue
-        {
-            gameState = newState
-        });
-    }
+    private float gamePlayingTimer = (0f);
+    private float gamePlayingTimerMax = 30f;
+    // public override void OnNetworkSpawn()
+    // {
+    //     //  state.OnValueChanged += GameStateValueChanged;
+    // }
+    // private void GameStateValueChanged(GameState prevState, GameState newState)
+    // {
+    //     OnStateChanged?.Invoke(this, new OnStateChangedValue
+    //     {
+    //         gameState = newState
+    //     });
+    // }
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -45,16 +46,16 @@ public class GameManager : NetworkBehaviour
     }
     void Update()
     {
-        if (!IsServer) return;
+        // if (!IsServer) return;
 
-        switch (state.Value)
+        switch (state)
         {
             case GameState.WaitingToStart:
                 if (waitingToStart < 0f)
                 {
 
-                    state.Value = GameState.CountDownToStart;
-
+                    state = GameState.CountDownToStart;
+                    OnStateChanged?.Invoke(this, EventArgs.Empty);
                 }
                 else
                 {
@@ -64,9 +65,9 @@ public class GameManager : NetworkBehaviour
             case GameState.CountDownToStart:
                 if (countDownToStart < 0f)
                 {
-                    gamePlayingTimer.Value = gamePlayingTimerMax.Value;
-                    state.Value = GameState.GameStart;
-
+                    gamePlayingTimer = gamePlayingTimerMax;
+                    state = GameState.GameStart;
+                    OnStateChanged?.Invoke(this, EventArgs.Empty);
                 }
                 else
                 {
@@ -74,13 +75,14 @@ public class GameManager : NetworkBehaviour
                 }
                 break;
             case GameState.GameStart:
-                if (gamePlayingTimer.Value < 0f)
+                if (gamePlayingTimer < 0f)
                 {
-                    state.Value = GameState.GameOver;
+                    state = GameState.GameOver;
+                    OnStateChanged?.Invoke(this, EventArgs.Empty);
                 }
                 else
                 {
-                    gamePlayingTimer.Value -= Time.deltaTime;
+                    gamePlayingTimer -= Time.deltaTime;
                 }
                 break;
             case GameState.GameOver:
@@ -88,40 +90,40 @@ public class GameManager : NetworkBehaviour
                 break;
         }
     }
-    // [ServerRpc(RequireOwnership = false)]
-    // private void GameStateChangedServerRpc()
-    // {
-    //     GameStateChangedClientRpc();
-    // }
-    // [ClientRpc]
-    // private void GameStateChangedClientRpc()
-    // {
-    //     OnStateChanged?.Invoke(this, new OnStateChangedValue
-    //     {
-    //         gameState = state.Value
-    //     });
+    [ServerRpc(RequireOwnership = false)]
+    private void GameStateChangedServerRpc()
+    {
+        OnStateChanged?.Invoke(this, EventArgs.Empty);
+    }
+    [ClientRpc]
+    private void GameStateChangedClientRpc()
+    {
+        OnStateChanged?.Invoke(this, new OnStateChangedValue
+        {
+            gameState = state
+        });
 
-    // }
+    }
     public void setTimer()
     {
-        gamePlayingTimer.Value = gamePlayingTimerMax.Value;
+        gamePlayingTimer = gamePlayingTimerMax;
     }
     public GameState GetCurrentGameState()
     {
-        return state.Value;
+        return state;
     }
     public bool IsCountDownActive()
     {
-        return state.Value == GameState.CountDownToStart;
+        return state == GameState.CountDownToStart;
     }
     public float GetCountDownTimer() => countDownToStart;
     public bool IsGameOver()
     {
-        return state.Value == GameState.GameOver;
+        return state == GameState.GameOver;
     }
     public float GetRecipeTimeout()
     {
-        return 1 - (gamePlayingTimer.Value / gamePlayingTimerMax.Value);
+        return 1 - (gamePlayingTimer / gamePlayingTimerMax);
     }
     public void TooglePauseGame()
     {

@@ -24,7 +24,7 @@ public class DeliveryCounter : BaseCounter
                 {
                     KitchenObject.DestroyKitchenObjectFromServer(player.GetKitchenObject());
 
-                    GameManager.Instance.setTimer();
+
                     OnDeliverySuccessServerRpc();
                 }
                 else
@@ -51,6 +51,7 @@ public class DeliveryCounter : BaseCounter
     private void OnDeliverySuccessClientRpc()
     {
         OnDeliverSuccess.Invoke(this, EventArgs.Empty);
+        GameManager.Instance.setTimer();
     }
     [ServerRpc(RequireOwnership = false)]
     private void OnDeliveryFailureServerRpc()
