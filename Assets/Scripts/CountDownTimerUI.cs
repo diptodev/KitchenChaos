@@ -16,14 +16,14 @@ public class CountDownTimerUI : MonoBehaviour
 
     private void GameManager_OnStateChanged(object sender, EventArgs e)
     {
-        // if ( )
-        // {
-        //     Show();
-        // }
-        // else
-        // {
-        //     Hide();
-        // }
+        if (GameManager.Instance.IsCountDownActive())
+        {
+            Show();
+        }
+        else
+        {
+            Hide();
+        }
     }
 
     void Update()

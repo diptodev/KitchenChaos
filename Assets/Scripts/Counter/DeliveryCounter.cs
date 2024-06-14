@@ -45,13 +45,14 @@ public class DeliveryCounter : BaseCounter
     [ServerRpc(RequireOwnership = false)]
     private void OnDeliverySuccessServerRpc()
     {
+        GameManager.Instance.setTimer();
         OnDeliverySuccessClientRpc();
     }
     [ClientRpc]
     private void OnDeliverySuccessClientRpc()
     {
         OnDeliverSuccess.Invoke(this, EventArgs.Empty);
-        GameManager.Instance.setTimer();
+
     }
     [ServerRpc(RequireOwnership = false)]
     private void OnDeliveryFailureServerRpc()

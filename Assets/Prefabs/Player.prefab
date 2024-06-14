@@ -107,6 +107,11 @@ MonoBehaviour:
   collisionLayerMask:
     serializedVersion: 2
     m_Bits: 192
+  playerSpawnedPosition:
+  - {x: -2, y: 0, z: 0}
+  - {x: 2, y: 0, z: 0}
+  - {x: -2, y: 0, z: -2}
+  - {x: 2, y: 0, z: -2}
 --- !u!114 &1550383351063568220
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ public class Player : NetworkBehaviour, IKitchenObject
 
     [SerializeField] private LayerMask counterLayerMask;
     [SerializeField] private LayerMask collisionLayerMask;
+    [SerializeField] private List<Vector3> playerSpawnedPosition;
     private float moveSpeed = 5f;
     private float rotateSpeed = 15f;
     private bool isWalking = false;
@@ -42,6 +43,7 @@ public class Player : NetworkBehaviour, IKitchenObject
             localPlayerInstance = this;
         }
         OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
+        transform.position = playerSpawnedPosition[(int)OwnerClientId];
     }
     private void Start()
     {

@@ -11,6 +11,7 @@ public class GameInput : MonoBehaviour
     private InputActions inputActions;
     public event EventHandler onInteractionEvent;
     public event EventHandler onInteractionAlternateEvent;
+    public event EventHandler onPlayerReadyEvent;
     public static event EventHandler onGamePauseEvent;
     private const string PLAYER_PREFS_BINDING = "PlayerPrefsBinding";
     public enum Binding
@@ -40,12 +41,17 @@ public class GameInput : MonoBehaviour
         inputActions.Player.Interact.performed += Interact_performed;
         inputActions.Player.InteractAlternate.performed += InteractAlternate_performed;
         inputActions.Player.PauseGame.performed += PauseGame_performed;
+        inputActions.Player.PlayerReady.performed += PlayerReady_performed;
 
     }
-    private void PauseGame_performed(UnityEngine.InputSystem.InputAction.CallbackContext callbackContext)
+    private void PauseGame_performed(InputAction.CallbackContext callbackContext)
     {
         onGamePauseEvent?.Invoke(this, EventArgs.Empty);
-        Debug.Log("Preformed");
+
+    }
+    private void PlayerReady_performed(InputAction.CallbackContext callbackContext)
+    {
+        onPlayerReadyEvent?.Invoke(this, EventArgs.Empty);
     }
     private void InteractAlternate_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {

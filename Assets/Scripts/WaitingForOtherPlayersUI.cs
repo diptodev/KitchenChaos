@@ -6,16 +6,20 @@ public class WaitingForOtherPlayersUI : MonoBehaviour
 {
     private void Start()
     {
-        gameObject.SetActive(false);
+        // gameObject.SetActive(false);
         GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
     }
     private void GameManager_OnStateChanged(object sender, System.EventArgs e)
     {
+        if (GameManager.Instance.IsGameWaitingToStart())
+        {
+            gameObject.SetActive(true);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
 
     }
-    // Update is called once per frame
-    void Update()
-    {
 
-    }
 }

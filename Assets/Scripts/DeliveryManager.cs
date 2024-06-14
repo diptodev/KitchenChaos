@@ -23,6 +23,21 @@ public class DeliveryManager : NetworkBehaviour
     {
         instance = this;
         waitingRecipeSOList = new List<KitchenReciepeSO>();
+
+    }
+    public override void OnNetworkSpawn()
+    {
+        gameObject.SetActive(false);
+        GameManager.Instance.OnStateChanged += GameManager_OnGameStateChanged;
+    }
+
+    private void GameManager_OnGameStateChanged(object sender, EventArgs e)
+    {
+        if (GameManager.Instance.IsGameStart())
+        {
+            gameObject.SetActive(true);
+            Debug.Log("Started Game");
+        }
     }
     private void Update()
     {
