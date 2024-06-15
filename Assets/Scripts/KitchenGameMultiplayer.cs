@@ -28,6 +28,7 @@ public class KitchenGameMultiplayer : NetworkBehaviour
         if (GameManager.Instance.IsGameWaitingToStart())
         {
             response.Approved = true;
+            response.CreatePlayerObject = true;
         }
         else
         {
