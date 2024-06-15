@@ -3,43 +3,60 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class KitchenGameMultiplayer : NetworkBehaviour
 {
     [SerializeField]
     private KitchenObjectListSO kitchenObjectListSO;
+    public event EventHandler OnTryingToConnect;
+    public event EventHandler OnFailedToConnect;
     public static KitchenGameMultiplayer Instance
     {
         get; private set;
     }
+    public const int MAX_PLAYER_AMOUNT = 4;
+
     private void Awake()
     {
         Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
     public void StartHost()
     {
         NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionApprovalCallback;
         NetworkManager.Singleton.StartHost();
     }
+    public void StartCLient()
+    {
+        OnTryingToConnect.Invoke(this, EventArgs.Empty);
+        NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_ConnectionDisconnectCallback;
+        NetworkManager.Singleton.StartClient();
+    }
+    private void NetworkManager_ConnectionDisconnectCallback(ulong clientId)
+    {
+        OnFailedToConnect.Invoke(this, EventArgs.Empty);
+    }
 
     private void NetworkManager_ConnectionApprovalCallback(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
     {
-        Debug.Log("Called");
-        if (GameManager.Instance.IsGameWaitingToStart())
-        {
-            response.Approved = true;
-            response.CreatePlayerObject = true;
-        }
-        else
+        if (SceneManager.GetActiveScene().name != SceneLoader.SceneState.CharacterSelectScene.ToString())
         {
             response.Approved = false;
+            response.Reason = "Game Already Started";
+            return;
         }
+        if (NetworkManager.Singleton.ConnectedClientsIds.Count >= MAX_PLAYER_AMOUNT)
+        {
+            response.Approved = false;
+            response.Reason = "Game Full";
+            return;
+        }
+        response.Approved = true;
+
     }
 
-    public void StartCLient()
-    {
-        NetworkManager.Singleton.StartClient();
-    }
+
     public void SpawnKitchenObject(KitchenObjectSO kitchenObjectSO, IKitchenObject kitchenObjectParent)
     {
         int indexOfKitchenObjectSO = GetKicthenOBjectIndexFromKitchenObjectSO(kitchenObjectSO);
@@ -87,4 +104,5 @@ public class KitchenGameMultiplayer : NetworkBehaviour
         KitchenObject kitchenObject = networkObjectKitchenObject.GetComponent<KitchenObject>();
         kitchenObject.ClearIkitchenParent();
     }
+
 }

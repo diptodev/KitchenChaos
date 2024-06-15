@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : NetworkBehaviour
 {
+    [SerializeField] private Transform playerPrefab;
     public event EventHandler OnStateChanged;
     public class OnStateChangedValue : EventArgs
     {
@@ -30,10 +32,23 @@ public class GameManager : NetworkBehaviour
 
     private float gamePlayingTimerMax = 30f;
     private NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(0f);
-    private Dictionary<ulong, bool> connectedClientActiveStatus = new Dictionary<ulong, bool>();
+    private Dictionary<ulong, bool> connectedClientActiveStatus;
     public override void OnNetworkSpawn()
     {
         state.OnValueChanged += GameStateValueChanged;
+        if (IsServer)
+        {
+            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += NetworkManager_SceneEventLoadedCompleted;
+        }
+    }
+
+    private void NetworkManager_SceneEventLoadedCompleted(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+    {
+        foreach (ulong clientId in clientsCompleted)
+        {
+            Transform playerTransform = Instantiate(playerPrefab);
+            playerTransform.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
+        }
     }
     private void GameStateValueChanged(GameState prevState, GameState newState)
     {
@@ -42,10 +57,11 @@ public class GameManager : NetworkBehaviour
     private void Awake()
     {
         if (Instance == null) Instance = this;
+        connectedClientActiveStatus = new Dictionary<ulong, bool>();
     }
     private void Start()
     {
-        GameInput.instance.onPlayerReadyEvent += GameInput_OnPlayerReadyEvent;
+        // GameInput.instance.onPlayerReadyEvent += GameInput_OnPlayerReadyEvent;
     }
     private void GameInput_OnPlayerReadyEvent(object sender, System.EventArgs e)
     {
@@ -62,7 +78,7 @@ public class GameManager : NetworkBehaviour
         switch (state.Value)
         {
             case GameState.WaitingToStart:
-
+                state.Value = GameState.CountDownToStart;
                 break;
             case GameState.CountDownToStart:
                 countDownToStart.Value -= Time.deltaTime;
