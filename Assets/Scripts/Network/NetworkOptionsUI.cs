@@ -18,12 +18,12 @@ public class NetworkOptionsUI : MonoBehaviour
         });
         startHost.onClick.AddListener(() =>
         {
-            NetworkManager.Singleton.StartHost();
+            KitchenGameMultiplayer.Instance.StartHost();
             gameObject.SetActive(false);
         });
         startClient.onClick.AddListener(() =>
         {
-            NetworkManager.Singleton.StartClient();
+            KitchenGameMultiplayer.Instance.StartCLient();
             gameObject.SetActive(false);
         });
     }
