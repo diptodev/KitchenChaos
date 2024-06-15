@@ -39,5 +39,8 @@ public class ConnectionResponseMessageUI : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
-
+    private void OnDestroy()
+    {
+        KitchenGameMultiplayer.Instance.OnFailedToConnect -= KitchenGameMultiplayer_OnFailedToConnect;
+    }
 }

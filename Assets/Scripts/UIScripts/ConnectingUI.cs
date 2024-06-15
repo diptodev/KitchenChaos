@@ -31,4 +31,9 @@ public class ConnectingUI : MonoBehaviour
         gameObject.SetActive(false);
 
     }
+    private void OnDestroy()
+    {
+        KitchenGameMultiplayer.Instance.OnTryingToConnect -= KitchenGameMultiplayer_OnTryToConnect;
+        KitchenGameMultiplayer.Instance.OnFailedToConnect -= KitchenGameMultiplayer_OnFailedToConnect;
+    }
 }
