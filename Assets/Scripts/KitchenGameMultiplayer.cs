@@ -16,6 +16,14 @@ public class KitchenGameMultiplayer : NetworkBehaviour
     {
         Instance = this;
     }
+    public void StartHost()
+    {
+
+    }
+    public void StartCLient()
+    {
+
+    }
     public void SpawnKitchenObject(KitchenObjectSO kitchenObjectSO, IKitchenObject kitchenObjectParent)
     {
         int indexOfKitchenObjectSO = GetKicthenOBjectIndexFromKitchenObjectSO(kitchenObjectSO);

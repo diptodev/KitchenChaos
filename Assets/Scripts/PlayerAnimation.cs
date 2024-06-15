@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -10,6 +11,7 @@ public class PlayerAnimation : NetworkBehaviour
     private const string IS_WALKING = "isWalk";
     private float footStepTimer;
     private float footStepTimerMax = 0.1f;
+
 
     private void Awake()
     {
