@@ -35,7 +35,7 @@ public class KitchenGameMultiplayer : NetworkBehaviour
     }
     private void NetworkManager_ConnectionDisconnectCallback(ulong clientId)
     {
-        OnFailedToConnect.Invoke(this, EventArgs.Empty);
+        OnFailedToConnect?.Invoke(this, EventArgs.Empty);
     }
 
     private void NetworkManager_ConnectionApprovalCallback(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)

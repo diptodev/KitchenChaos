@@ -20,7 +20,7 @@ public static class SceneLoader
   }
   public static void LoaderCallback()
   {
-    LoadNewScene(SceneState.GameScene);
+    LoadNewScene(SceneState.LobbyScene);
   }
   public static void LoadSceneFromNetwork(SceneState sceneState)
   {
