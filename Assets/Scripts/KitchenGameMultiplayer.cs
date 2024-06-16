@@ -9,6 +9,7 @@ public class KitchenGameMultiplayer : NetworkBehaviour
 {
     [SerializeField]
     private KitchenObjectListSO kitchenObjectListSO;
+    [SerializeField] private List<Color> playerColorList;
     public event EventHandler OnTryingToConnect;
     public event EventHandler OnFailedToConnect;
     public event EventHandler OnPlayerDataListChanged;
@@ -43,6 +44,7 @@ public class KitchenGameMultiplayer : NetworkBehaviour
         playerDataNetworkList.Add(new PlayerData
         {
             clientId = connectedClientsId,
+            colorId = GetFirstUnusedColorId()
         });
     }
 
@@ -127,5 +129,87 @@ public class KitchenGameMultiplayer : NetworkBehaviour
     {
         return playerIndex < playerDataNetworkList.Count;
     }
+    public Color GetPlayerColorByColorId(int colorId)
+    {
+        return playerColorList[colorId];
+    }
+    public PlayerData GetPlayerDataFromClientId(ulong clientId)
+    {
+        foreach (PlayerData playerData in playerDataNetworkList)
+        {
+            if (playerData.clientId == clientId)
+            {
+                return playerData;
+            }
+        }
+        return default;
+    }
+    public PlayerData GetPlayerData()
+    {
+        return GetPlayerDataFromClientId(NetworkManager.Singleton.LocalClientId);
+    }
 
+    public void ChangePlayerColor(int colorId)
+    {
+        ChangePlayerColorServerRpc(colorId);
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void ChangePlayerColorServerRpc(int colorId, ServerRpcParams serverRpcParams = default)
+    {
+        if (!IsColorAvailable(colorId))
+        {
+            return;
+        }
+        int playerDataIndex = GetPlayerDataIndexFromTheClientId(serverRpcParams.Receive.SenderClientId);
+        PlayerData playerData = playerDataNetworkList[playerDataIndex];
+        playerData.colorId = colorId;
+        playerDataNetworkList[playerDataIndex] = playerData;
+    }
+    // [ClientRpc]
+    // private void ChangePlayerColorClientRpc(int colorId, ServerRpcParams serverRpcParams = default)
+    // {
+
+    // }
+    public int GetPlayerDataIndexFromTheClientId(ulong clientId)
+    {
+        for (int i = 0; i < playerDataNetworkList.Count; i++)
+        {
+            if (playerDataNetworkList[i].clientId == clientId)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+    public bool IsColorAvailable(int colorId)
+    {
+        foreach (PlayerData playerData in playerDataNetworkList)
+        {
+            if (colorId == playerData.colorId)
+            {
+                //not Available
+                return false;
+            }
+        }
+        return true;
+    }
+    public int GetFirstUnusedColorId()
+    {
+        for (int i = 0; i < playerColorList.Count; i++)
+        {
+            if (IsColorAvailable(i))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+    public PlayerData GetPlayerDataFromPlyerIndex(int playerIndex)
+    {
+        return playerDataNetworkList[playerIndex];
+    }
+    public ulong GetCilentIdFromPlayerIndex(int playerIndex)
+    {
+        return playerDataNetworkList[playerIndex].clientId;
+    }
 }

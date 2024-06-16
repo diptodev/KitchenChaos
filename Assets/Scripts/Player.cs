@@ -16,6 +16,7 @@ public class Player : NetworkBehaviour, IKitchenObject
     [SerializeField] private LayerMask counterLayerMask;
     [SerializeField] private LayerMask collisionLayerMask;
     [SerializeField] private List<Vector3> playerSpawnedPosition;
+    [SerializeField] private PlayerVisual playerVisual;
     private float moveSpeed = 5f;
     private float rotateSpeed = 15f;
     private bool isWalking = false;
@@ -53,6 +54,8 @@ public class Player : NetworkBehaviour, IKitchenObject
     {
         GameInput.instance.onInteractionEvent += GameInput_onInteractionEvent;
         GameInput.instance.onInteractionAlternateEvent += GameInput_onInteractionAlternateEvent;
+        PlayerData playerData = KitchenGameMultiplayer.Instance.GetPlayerDataFromClientId(OwnerClientId);
+        playerVisual.SetPlayerColor(KitchenGameMultiplayer.Instance.GetPlayerColorByColorId(playerData.colorId));
 
     }
     private void Player_OnClientDisconnectCallback(ulong clientId)

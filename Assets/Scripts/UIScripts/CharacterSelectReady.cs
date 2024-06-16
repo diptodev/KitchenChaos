@@ -22,6 +22,7 @@ public class CharacterSelectReady : NetworkBehaviour
     private void LocalPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default)
     {
         LocalPlayerReadyClientRpc(serverRpcParams.Receive.SenderClientId);
+        //connectedClientActiveStatus[serverRpcParams.Receive.SenderClientId] = true;
         bool allClientIsReady = true;
         foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
@@ -41,5 +42,9 @@ public class CharacterSelectReady : NetworkBehaviour
     {
         connectedClientActiveStatus[clientId] = true;
         OnReadyChanged?.Invoke(this, EventArgs.Empty);
+    }
+    public bool IsPlayerReady(ulong clientId)
+    {
+        return connectedClientActiveStatus.ContainsKey(clientId) && connectedClientActiveStatus[clientId];
     }
 }
