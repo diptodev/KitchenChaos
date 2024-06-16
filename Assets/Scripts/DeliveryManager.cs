@@ -148,5 +148,9 @@ public class DeliveryManager : NetworkBehaviour
     {
         return totalRecipeDelivered;
     }
+    public override void OnDestroy()
+    {
+        GameManager.Instance.OnStateChanged -= GameManager_OnGameStateChanged;
+    }
 }
 

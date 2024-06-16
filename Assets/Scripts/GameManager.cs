@@ -31,7 +31,7 @@ public class GameManager : NetworkBehaviour
     private NetworkVariable<float> countDownToStart = new NetworkVariable<float>(3f);
 
     private float gamePlayingTimerMax = 30f;
-    private NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(0f);
+    private NetworkVariable<float> gamePlayingTimer;
     private Dictionary<ulong, bool> connectedClientActiveStatus;
     public override void OnNetworkSpawn()
     {
@@ -58,6 +58,7 @@ public class GameManager : NetworkBehaviour
     {
         if (Instance == null) Instance = this;
         connectedClientActiveStatus = new Dictionary<ulong, bool>();
+        gamePlayingTimer = new NetworkVariable<float>(0f);
     }
     private void Start()
     {

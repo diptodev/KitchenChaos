@@ -7,6 +7,7 @@ using UnityEngine;
 public class CharacterSelectReady : NetworkBehaviour
 {
     public static CharacterSelectReady instance { get; private set; }
+    public event EventHandler OnReadyChanged;
     private Dictionary<ulong, bool> connectedClientActiveStatus;
     private void Awake()
     {
@@ -20,7 +21,7 @@ public class CharacterSelectReady : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void LocalPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default)
     {
-        connectedClientActiveStatus[serverRpcParams.Receive.SenderClientId] = true;
+        LocalPlayerReadyClientRpc(serverRpcParams.Receive.SenderClientId);
         bool allClientIsReady = true;
         foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
@@ -34,5 +35,11 @@ public class CharacterSelectReady : NetworkBehaviour
         {
             SceneLoader.LoadSceneFromNetwork(SceneLoader.SceneState.GameScene);
         }
+    }
+    [ClientRpc]
+    private void LocalPlayerReadyClientRpc(ulong clientId)
+    {
+        connectedClientActiveStatus[clientId] = true;
+        OnReadyChanged?.Invoke(this, EventArgs.Empty);
     }
 }

@@ -12,7 +12,7 @@ public class MainMenu : MonoBehaviour
     private void Awake()
     {
         buttonPlay.onClick.AddListener(PlayGame);
-        buttonPlay.onClick.AddListener(QuitGame);
+        buttonQuit.onClick.AddListener(QuitGame);
     }
     private void PlayGame()
     {

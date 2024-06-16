@@ -11,22 +11,41 @@ public class KitchenGameMultiplayer : NetworkBehaviour
     private KitchenObjectListSO kitchenObjectListSO;
     public event EventHandler OnTryingToConnect;
     public event EventHandler OnFailedToConnect;
+    public event EventHandler OnPlayerDataListChanged;
     public static KitchenGameMultiplayer Instance
     {
         get; private set;
     }
     public const int MAX_PLAYER_AMOUNT = 4;
-
+    private NetworkList<PlayerData> playerDataNetworkList;
     private void Awake()
     {
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        playerDataNetworkList = new NetworkList<PlayerData>();
+        playerDataNetworkList.OnListChanged += PlayerData_OnListChanged;
     }
+
+    private void PlayerData_OnListChanged(NetworkListEvent<PlayerData> changeEvent)
+    {
+        OnPlayerDataListChanged?.Invoke(this, EventArgs.Empty);
+    }
+
     public void StartHost()
     {
         NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionApprovalCallback;
+        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClinetConnectedCallback;
         NetworkManager.Singleton.StartHost();
     }
+
+    private void NetworkManager_OnClinetConnectedCallback(ulong connectedClientsId)
+    {
+        playerDataNetworkList.Add(new PlayerData
+        {
+            clientId = connectedClientsId,
+        });
+    }
+
     public void StartCLient()
     {
         OnTryingToConnect.Invoke(this, EventArgs.Empty);
@@ -103,6 +122,10 @@ public class KitchenGameMultiplayer : NetworkBehaviour
         networkObjectReferenceKitchenObject.TryGet(out NetworkObject networkObjectKitchenObject);
         KitchenObject kitchenObject = networkObjectKitchenObject.GetComponent<KitchenObject>();
         kitchenObject.ClearIkitchenParent();
+    }
+    public bool IsPlayerConnectedFromIndex(int playerIndex)
+    {
+        return playerIndex < playerDataNetworkList.Count;
     }
 
 }
