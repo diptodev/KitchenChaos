@@ -12,7 +12,7 @@ public class CharacterSelectPlayer : MonoBehaviour
     {
         KitchenGameMultiplayer.Instance.OnPlayerDataListChanged += KitchenGameMultiplayer_OnPlayerDataListChanged;
         CharacterSelectReady.instance.OnReadyChanged += CharacterSelectReady_OnReadyChanged;
-
+       
         UpdateVisual();
         readyTextGameObject.SetActive(false);
     }
@@ -28,7 +28,7 @@ public class CharacterSelectPlayer : MonoBehaviour
     }
     private void UpdateVisual()
     {
-        if (KitchenGameMultiplayer.Instance.IsPlayerConnectedFromIndex(playerIndex))
+        if (KitchenGameMultiplayer.Instance.IsPlayerConnectedFromIndex(playerIndex) )
         {
             PlayerData playerData = KitchenGameMultiplayer.Instance.GetPlayerDataFromPlyerIndex(playerIndex);
             playerVisual.SetPlayerColor(KitchenGameMultiplayer.Instance.GetPlayerColorByColorId(playerData.colorId));

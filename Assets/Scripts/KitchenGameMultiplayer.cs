@@ -210,6 +210,7 @@ public class KitchenGameMultiplayer : NetworkBehaviour
     }
     public ulong GetCilentIdFromPlayerIndex(int playerIndex)
     {
+        Debug.Log("playerIndex " + playerIndex + "networkList" + playerDataNetworkList.Count);
         return playerDataNetworkList[playerIndex].clientId;
     }
 }
